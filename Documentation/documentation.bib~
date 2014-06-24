@@ -1,0 +1,1114 @@
+% This file was created with JabRef 2.7b.
+% Encoding: UTF8
+
+@BOOK{Pater2001,
+  title = {{Planetary Sciences}},
+  year = {2001},
+  author = {{de Pater}, I. and {Lissauer}, J.~J.},
+  month = dec,
+  adsnote = {Provided by the SAO/NASA Astrophysics Data System},
+  adsurl = {http://adsabs.harvard.edu/abs/2001plsc.book.....D},
+  booktitle = {Planetary Sciences, by Imke de Pater and Jack J.~Lissauer, pp.~544.~ISBN
+	0521482194.~Cambridge, UK: Cambridge University Press, December 2001.}
+}
+
+@ELECTRONIC{STK2013,
+  author = {{AGI}},
+  year = {{}},
+  title = {STK},
+  note = {\httplink{http://www.agi.com/products/stk/}, retrieved June 2013.},
+  owner = {thibault},
+  timestamp = {2013.06.17}
+}
+
+@ARTICLE{Armitage2007,
+  author = {{Armitage}, P.~J.},
+  title = {{Lecture notes on the formation and early evolution of planetary
+	systems}},
+  journal = {ArXiv e-prints},
+  year = {2007},
+  month = jan,
+  adsnote = {Provided by the SAO/NASA Astrophysics Data System},
+  adsurl = {http://adsabs.harvard.edu/abs/2007astro.ph..1485A},
+  eprint = {arXiv:astro-ph/0701485},
+  keywords = {Astrophysics}
+}
+
+@ARTICLE{Auvergne2009,
+  author = {{Auvergne}, M. and {Bodin}, P. and {Boisnard}, L. and {Buey}, J.-T.
+	and {Chaintreuil}, S. and {Epstein}, G. and {Jouret}, M. and {Lam-Trong},
+	T. and {Levacher}, P. and {Magnan}, A. and {Perez}, R. and {Plasson},
+	P. and {Plesseria}, J. and {Peter}, G. and {Steller}, M. and {Tiph{\`e}ne},
+	D. and {Baglin}, A. and {Agogu{\'e}}, P. and {Appourchaux}, T. and
+	{Barbet}, D. and {Beaufort}, T. and {Bellenger}, R. and {Berlin},
+	R. and {Bernardi}, P. and {Blouin}, D. and {Boumier}, P. and {Bonneau},
+	F. and {Briet}, R. and {Butler}, B. and {Cautain}, R. and {Chiavassa},
+	F. and {Costes}, V. and {Cuvilho}, J. and {Cunha-Parro}, V. and {de
+	Oliveira Fialho}, F. and {Decaudin}, M. and {Defise}, J.-M. and {Djalal},
+	S. and {Docclo}, A. and {Drummond}, R. and {Dupuis}, O. and {Exil},
+	G. and {Faur{\'e}}, C. and {Gaboriaud}, A. and {Gamet}, P. and {Gavalda},
+	P. and {Grolleau}, E. and {Gueguen}, L. and {Guivarc'h}, V. and {Guterman},
+	P. and {Hasiba}, J. and {Huntzinger}, G. and {Hustaix}, H. and {Imbert},
+	C. and {Jeanville}, G. and {Johlander}, B. and {Jorda}, L. and {Journoud},
+	P. and {Karioty}, F. and {Kerjean}, L. and {Lafond}, L. and {Lapeyrere},
+	V. and {Landiech}, P. and {Larqu{\'e}}, T. and {Laudet}, P. and {Le
+	Merrer}, J. and {Leporati}, L. and {Leruyet}, B. and {Levieuge},
+	B. and {Llebaria}, A. and {Martin}, L. and {Mazy}, E. and {Mesnager},
+	J.-M. and {Michel}, J.-P. and {Moalic}, J.-P. and {Monjoin}, W. and
+	{Naudet}, D. and {Neukirchner}, S. and {Nguyen-Kim}, K. and {Ollivier},
+	M. and {Orcesi}, J.-L. and {Ottacher}, H. and {Oulali}, A. and {Parisot},
+	J. and {Perruchot}, S. and {Piacentino}, A. and {Pinheiro da Silva},
+	L. and {Platzer}, J. and {Pontet}, B. and {Pradines}, A. and {Quentin},
+	C. and {Rohbeck}, U. and {Rolland}, G. and {Rollenhagen}, F. and
+	{Romagnan}, R. and {Russ}, N. and {Samadi}, R. and {Schmidt}, R.
+	and {Schwartz}, N. and {Sebbag}, I. and {Smit}, H. and {Sunter},
+	W. and {Tello}, M. and {Toulouse}, P. and {Ulmer}, B. and {Vandermarcq},
+	O. and {Vergnault}, E. and {Wallner}, R. and {Waultier}, G. and {Zanatta},
+	P.},
+  title = {{The CoRoT satellite in flight: description and performance}},
+  journal = {\aap},
+  year = {2009},
+  volume = {506},
+  pages = {411-424},
+  month = oct,
+  adsnote = {Provided by the SAO/NASA Astrophysics Data System},
+  adsurl = {http://adsabs.harvard.edu/abs/2009A%26A...506..411A},
+  archiveprefix = {arXiv},
+  doi = {10.1051/0004-6361/200810860},
+  eprint = {0901.2206},
+  keywords = {instrumentation: photometers, stars: planetary systems, stars: oscillations},
+  primaryclass = {astro-ph.SR}
+}
+
+@INPROCEEDINGS{Baker2005,
+  author = {{Baker}, D.~N.},
+  title = {{Introduction to Space Weather}},
+  booktitle = {Lecture Notes in Physics, Berlin Springer Verlag},
+  year = {2005},
+  editor = {{Scherer}, K. and {Fichtner}, H. and {Heber}, B. and {Mall}, U.},
+  volume = {656},
+  pages = {3-540},
+  adsnote = {Provided by the SAO/NASA Astrophysics Data System},
+  adsurl = {http://adsabs.harvard.edu/abs/2005LNP...656....3B},
+  doi = {10.1007/978-3-540-31534-6_1}
+}
+
+@ARTICLE{Barclay2013,
+  author = {{Barclay}, T. and {Rowe}, J.~F. and {Lissauer}, J.~J. and {Huber},
+	D. and {Fressin}, F. and {Howell}, S.~B. and {Bryson}, S.~T. and
+	{Chaplin}, W.~J. and {D{\'e}sert}, J.-M. and {Lopez}, E.~D. and {Marcy},
+	G.~W. and {Mullally}, F. and {Ragozzine}, D. and {Torres}, G. and
+	{Adams}, E.~R. and {Agol}, E. and {Barrado}, D. and {Basu}, S. and
+	{Bedding}, T.~R. and {Buchhave}, L.~A. and {Charbonneau}, D. and
+	{Christiansen}, J.~L. and {Christensen-Dalsgaard}, J. and {Ciardi},
+	D. and {Cochran}, W.~D. and {Dupree}, A.~K. and {Elsworth}, Y. and
+	{Everett}, M. and {Fischer}, D.~A. and {Ford}, E.~B. and {Fortney},
+	J.~J. and {Geary}, J.~C. and {Haas}, M.~R. and {Handberg}, R. and
+	{Hekker}, S. and {Henze}, C.~E. and {Horch}, E. and {Howard}, A.~W.
+	and {Hunter}, R.~C. and {Isaacson}, H. and {Jenkins}, J.~M. and {Karoff},
+	C. and {Kawaler}, S.~D. and {Kjeldsen}, H. and {Klaus}, T.~C. and
+	{Latham}, D.~W. and {Li}, J. and {Lillo-Box}, J. and {Lund}, M.~N.
+	and {Lundkvist}, M. and {Metcalfe}, T.~S. and {Miglio}, A. and {Morris},
+	R.~L. and {Quintana}, E.~V. and {Stello}, D. and {Smith}, J.~C. and
+	{Still}, M. and {Thompson}, S.~E.},
+  title = {{A sub-Mercury-sized exoplanet}},
+  journal = {\nat},
+  year = {2013},
+  volume = {494},
+  pages = {452-454},
+  month = feb,
+  adsnote = {Provided by the SAO/NASA Astrophysics Data System},
+  adsurl = {http://adsabs.harvard.edu/abs/2013Natur.494..452B},
+  doi = {10.1038/nature11914}
+}
+
+@ARTICLE{2011ApJ...733...65B,
+  author = {{Barman}, T.~S. and {Macintosh}, B. and {Konopacky}, Q.~M. and {Marois},
+	C.},
+  title = {{Clouds and Chemistry in the Atmosphere of Extrasolar Planet HR8799b}},
+  journal = {\apj},
+  year = {2011},
+  volume = {733},
+  pages = {65},
+  month = may,
+  eid = {65},
+  adsnote = {Provided by the SAO/NASA Astrophysics Data System},
+  adsurl = {http://adsabs.harvard.edu/abs/2011ApJ...733...65B},
+  archiveprefix = {arXiv},
+  doi = {10.1088/0004-637X/733/1/65},
+  eprint = {1103.3895},
+  keywords = {brown dwarfs, planetary systems, stars: atmospheres, stars: low-mass},
+  primaryclass = {astro-ph.EP}
+}
+
+@ARTICLE{Baruteau2013,
+  author = {{Baruteau}, C. and {Papaloizou}, J.~C.~B.},
+  title = {{Disk-planets interactions and the diversity of period ratios in
+	Kepler's multi-planetary systems}},
+  journal = {ArXiv e-prints},
+  year = {2013},
+  month = jan,
+  adsnote = {Provided by the SAO/NASA Astrophysics Data System},
+  adsurl = {http://adsabs.harvard.edu/abs/2013arXiv1301.0779B},
+  archiveprefix = {arXiv},
+  eprint = {1301.0779},
+  keywords = {Astrophysics - Earth and Planetary Astrophysics, Astrophysics - Solar
+	and Stellar Astrophysics},
+  primaryclass = {astro-ph.EP}
+}
+
+@ARTICLE{Basri2005,
+  author = {{Basri}, G. and {Borucki}, W.~J. and {Koch}, D.},
+  title = {{The Kepler Mission: A wide-field transit search for terrestrial
+	planets [review article]}},
+  journal = {\nar},
+  year = {2005},
+  volume = {49},
+  pages = {478-485},
+  month = nov,
+  adsnote = {Provided by the SAO/NASA Astrophysics Data System},
+  adsurl = {http://adsabs.harvard.edu/abs/2005NewAR..49..478B},
+  doi = {10.1016/j.newar.2005.08.026}
+}
+
+@BOOK{Beatty1999,
+  title = {The New Solar System},
+  publisher = {Sky Pub.},
+  year = {1999},
+  author = {{Beatty}, J.K. and {Petersen}, C.C. and {Chaikin}, A.L.},
+  isbn = {9780521645874},
+  lccn = {98034472},
+  url = {http://books.google.ch/books?id=iOezyHMVAMcC}
+}
+
+@INBOOK{Bennett2008,
+  pages = {47},
+  title = {{Detection of Extrasolar Planets by Gravitational Microlensing}},
+  year = {2008},
+  editor = {{Mason}, J.~W.},
+  author = {{Bennett}, D.~P.},
+  adsnote = {Provided by the SAO/NASA Astrophysics Data System},
+  adsurl = {http://adsabs.harvard.edu/abs/2008exop.book...47B},
+  booktitle = {Exoplanets},
+  doi = {10.1007/978-3-540-74008-7_3},
+  keywords = {Physics}
+}
+
+@INBOOK{Breault2010,
+  chapter = {7 -- Control of Stray Light},
+  title = {Control of Stray Light \emph{in} Handbook of Optics, Third Edition
+	Volume II: Design, Fabrication and Testing, Sources and Detectors,
+	Radiometry and Photometry},
+  publisher = {McGraw-Hill, Inc.},
+  year = {2010},
+  author = {Breault},
+  address = {New York, NY, USA},
+  edition = {3},
+  isbn = {0071498907, 9780071498906}
+}
+
+@INPROCEEDINGS{Broeg2013,
+  author = {{Broeg}, C. and {Fortier}, A. and {Ehrenreich}, D. and {Alibert},
+	Y. and {Baumjohann}, W. and {Benz}, W. and {Deleuil}, M. and {Gillon},
+	M. and {Ivanov}, A. and {Liseau}, R. and {Meyer}, M. and {Oloffson},
+	G. and {Pagano}, I. and {Piotto}, G. and {Pollacco}, D. and {Queloz},
+	D. and {Ragazzoni}, R. and {Renotte}, E. and {Steller}, M. and {Thomas},
+	N. },
+  title = {{CHEOPS: A transit photometry mission for ESA's small mission programme}},
+  booktitle = {European Physical Journal Web of Conferences},
+  year = {2013},
+  volume = {47},
+  series = {European Physical Journal Web of Conferences},
+  pages = {3005},
+  month = apr,
+  adsnote = {Provided by the SAO/NASA Astrophysics Data System},
+  adsurl = {http://adsabs.harvard.edu/abs/2013EPJWC..4703005B},
+  archiveprefix = {arXiv},
+  doi = {10.1051/epjconf/20134703005},
+  eid = {03005},
+  eprint = {1305.2270},
+  primaryclass = {astro-ph.EP}
+}
+
+@ARTICLE{Campbell1988,
+  author = {{Campbell}, B. and {Walker}, G.~A.~H. and {Yang}, S.},
+  title = {{A search for substellar companions to solar-type stars}},
+  journal = {\apj},
+  year = {1988},
+  volume = {331},
+  pages = {902-921},
+  month = aug,
+  adsnote = {Provided by the SAO/NASA Astrophysics Data System},
+  adsurl = {http://adsabs.harvard.edu/abs/1988ApJ...331..902C},
+  doi = {10.1086/166608},
+  keywords = {COMPANION STARS, DWARF STARS, LATE STARS, SUBGIANT STARS, VARIABLE
+	STARS, ACCRETION DISKS, BROWN DWARF STARS, CHROMOSPHERE, GRAVITATIONAL
+	COLLAPSE, LINE SPECTRA, RADIAL VELOCITY, VELOCITY DISTRIBUTION}
+}
+
+@INPROCEEDINGS{Chabrier2011,
+  author = {{Chabrier}, G. and {Leconte}, J. and {Baraffe}, I.},
+  title = {{Understanding exoplanet formation, structure and evolution in 2010}},
+  booktitle = {IAU Symposium},
+  year = {2011},
+  editor = {{Sozzetti}, A. and {Lattanzi}, M.~G. and {Boss}, A.~P.},
+  volume = {276},
+  series = {IAU Symposium},
+  pages = {171-180},
+  month = nov,
+  adsnote = {Provided by the SAO/NASA Astrophysics Data System},
+  adsurl = {http://adsabs.harvard.edu/abs/2011IAUS..276..171C},
+  archiveprefix = {arXiv},
+  doi = {10.1017/S174392131102014X},
+  eprint = {1012.0765},
+  keywords = {planets and satellites: general},
+  primaryclass = {astro-ph.SR}
+}
+
+@TECHREPORT{CHEOPSConsortium2012,
+  author = {{CHEOPS Mission Proposal}},
+  title = {{CHEOPS Consortium}},
+  year = {2012},
+  month = {June},
+  owner = {thibault},
+  timestamp = {2013.05.19}
+}
+
+@TECHREPORT{SciReq,
+  author = {{CHEOPS Science Requirements Document}},
+  title = {{CHEOPS Consortium}},
+  institution = {{Consortium}},
+  year = {2013},
+  month = {18 {Feb}},
+  note = {{CHEOPS-EST-SCI-RS-001, Issue 1, Revision 0.}},
+  owner = {thibault},
+  timestamp = {2013.06.10}
+}
+
+@BOOK{Chromey2010,
+  title = {{To Measure the Sky}},
+  publisher = {Cambridge University Press},
+  year = {2010},
+  author = {{Chromey}, F.~R.},
+  adsnote = {Provided by the SAO/NASA Astrophysics Data System},
+  adsurl = {http://adsabs.harvard.edu/abs/2010mesk.book.....C},
+  booktitle = {To Measure the Sky by Frederick R.~Chromey.~Cambridge University
+	Press, 2010.~ISBN: 9780521747684}
+}
+
+@ARTICLE{Dressing2013,
+  author = {{Dressing}, C.~D. and {Charbonneau}, D.},
+  title = {{The Occurrence Rate of Small Planets around Small Stars}},
+  journal = {\apj},
+  year = {2013},
+  volume = {767},
+  pages = {95},
+  month = apr,
+  eid = {95},
+  adsnote = {Provided by the SAO/NASA Astrophysics Data System},
+  adsurl = {http://adsabs.harvard.edu/abs/2013ApJ...767...95D},
+  archiveprefix = {arXiv},
+  doi = {10.1088/0004-637X/767/1/95},
+  eprint = {1302.1647},
+  keywords = {catalogs, methods: data analysis, planetary systems, stars: low-mass,
+	surveys, techniques: photometric},
+  primaryclass = {astro-ph.EP}
+}
+
+@TECHREPORT{aimo2006,
+  author = {{e2v technologies}},
+  title = {{CCD47--20 Back Illuminated High Performance AIMO}},
+  year = {2006},
+  month = {Mar},
+  note = {A1A--100041 Issue 6}
+}
+
+@TECHREPORT{Fortier2013,
+  author = {{Fortier}, A. and {Kuntzer}, T.},
+  title = {{Earth Stray Light Calculations}},
+  institution = {University of Bern},
+  year = {2013},
+  month = {30 May},
+  note = {{CHEOPS-B0-UBE-TN-00032-1-3, Issue 1, Revision 4.}}
+}
+
+@ARTICLE{Gardner2006,
+  author = {{Gardner}, J.~P. and {Mather}, J.~C. and {Clampin}, M. and {Doyon},
+	R. and {Greenhouse}, M.~A. and {Hammel}, H.~B. and {Hutchings}, J.~B.
+	and {Jakobsen}, P. and {Lilly}, S.~J. and {Long}, K.~S. and {Lunine},
+	J.~I. and {McCaughrean}, M.~J. and {Mountain}, M. and {Nella}, J.
+	and {Rieke}, G.~H. and {Rieke}, M.~J. and {Rix}, H.-W. and {Smith},
+	E.~P. and {Sonneborn}, G. and {Stiavelli}, M. and {Stockman}, H.~S.
+	and {Windhorst}, R.~A. and {Wright}, G.~S.},
+  title = {{The James Webb Space Telescope}},
+  journal = {\ssr},
+  year = {2006},
+  volume = {123},
+  pages = {485-606},
+  month = apr,
+  adsnote = {Provided by the SAO/NASA Astrophysics Data System},
+  adsurl = {http://adsabs.harvard.edu/abs/2006SSRv..123..485G},
+  doi = {10.1007/s11214-006-8315-7},
+  eprint = {arXiv:astro-ph/0606175},
+  keywords = {galaxies: formation, infrared: general, planetary systems, space vehicles:
+	instruments, stars: formation}
+}
+
+@INBOOK{Gaudi2011,
+  pages = {79-110},
+  title = {{Microlensing by Exoplanets}},
+  year = {2011},
+  editor = {{Seager}, S.},
+  author = {{Gaudi}, B.~S.},
+  adsnote = {Provided by the SAO/NASA Astrophysics Data System},
+  adsurl = {http://adsabs.harvard.edu/abs/2011exop.book...79G},
+  booktitle = {Exoplanets, edited by S.~Seager.~ Tucson, AZ: University of Arizona
+	Press, 2011, 526 pp.~ ISBN 978-0-8165-2945-2., p.79-110}
+}
+
+@ARTICLE{Goldreich1973,
+  author = {{Goldreich}, P. and {Ward}, W.~R.},
+  title = {{The Formation of Planetesimals}},
+  journal = {\apj},
+  year = {1973},
+  volume = {183},
+  pages = {1051-1062},
+  month = aug,
+  adsnote = {Provided by the SAO/NASA Astrophysics Data System},
+  adsurl = {http://adsabs.harvard.edu/abs/1973ApJ...183.1051G},
+  doi = {10.1086/152291}
+}
+
+@ARTICLE{Henry2011,
+  author = {{Henry}, G.~W. and {Howard}, A.~W. and {Marcy}, G.~W. and {Fischer},
+	D.~A. and {Johnson}, J.~A.},
+  title = {{Detection of a Transiting Low-Density Super-Earth}},
+  journal = {ArXiv e-prints},
+  year = {2011},
+  month = sep,
+  adsnote = {Provided by the SAO/NASA Astrophysics Data System},
+  adsurl = {http://adsabs.harvard.edu/abs/2011arXiv1109.2549H},
+  archiveprefix = {arXiv},
+  eprint = {1109.2549},
+  keywords = {Astrophysics - Solar and Stellar Astrophysics},
+  primaryclass = {astro-ph.SR}
+}
+
+@ARTICLE{Hog2000,
+  author = {{H{\o}g}, E. and {Fabricius}, C. and {Makarov}, V.~V. and {Urban},
+	S. and {Corbin}, T. and {Wycoff}, G. and {Bastian}, U. and {Schwekendiek},
+	P. and {Wicenec}, A.},
+  title = {{The Tycho-2 catalogue of the 2.5 million brightest stars}},
+  journal = {\aap},
+  year = {2000},
+  volume = {355},
+  pages = {L27-L30},
+  month = mar,
+  adsnote = {Provided by the SAO/NASA Astrophysics Data System},
+  adsurl = {http://adsabs.harvard.edu/abs/2000A%26A...355L..27H},
+  keywords = {ASTROMETRY, STARS: FUNDAMENTAL PARAMETERS, CATALOGS}
+}
+
+@ARTICLE{Kalas2008,
+  author = {{Kalas}, P. and {Graham}, J.~R. and {Chiang}, E. and {Fitzgerald},
+	M.~P. and {Clampin}, M. and {Kite}, E.~S. and {Stapelfeldt}, K. and
+	{Marois}, C. and {Krist}, J.},
+  title = {{Optical Images of an Exosolar Planet 25 Light-Years from Earth}},
+  journal = {Science},
+  year = {2008},
+  volume = {322},
+  pages = {1345-},
+  month = nov,
+  adsnote = {Provided by the SAO/NASA Astrophysics Data System},
+  adsurl = {http://adsabs.harvard.edu/abs/2008Sci...322.1345K},
+  archiveprefix = {arXiv},
+  doi = {10.1126/science.1166609},
+  eprint = {0811.1994}
+}
+
+@BOOK{Keller1994,
+  title = {{Images of the nucleus of Comet Halley. Volume 1: obtained by the
+	Halley Multicolour Camera (HMC) on board the Giotto spacecraft.}},
+  publisher = {European Space Agency, Paris (France)},
+  year = {1994},
+  author = {{Keller}, H.~U. and {Curdt}, W. and {Kramm}, J.-R. and {Thomas},
+	N. },
+  adsnote = {Provided by the SAO/NASA Astrophysics Data System},
+  adsurl = {http://adsabs.harvard.edu/abs/1994inch.book.....K},
+  booktitle = {Inorganic Chemistry}
+}
+
+@ARTICLE{Levasseur1980,
+  author = {{Levasseur-Regourd}, A.~C. and {Dumont}, R.},
+  title = {{Absolute photometry of zodiacal light}},
+  journal = {\aap},
+  year = {1980},
+  volume = {84},
+  pages = {277-279},
+  month = apr,
+  adsnote = {Provided by the SAO/NASA Astrophysics Data System},
+  adsurl = {http://adsabs.harvard.edu/abs/1980A%26A....84..277L},
+  keywords = {ASTRONOMICAL PHOTOMETRY, BRIGHTNESS, ZODIACAL LIGHT, TABLES (DATA)}
+}
+
+@ARTICLE{Levison2007,
+  author = {{Levison}, H.~F. and {Morbidelli}, A.},
+  title = {{Models of the collisional damping scenario for ice-giant planets
+	and Kuiper belt formation}},
+  journal = {\icarus},
+  year = {2007},
+  volume = {189},
+  pages = {196-212},
+  month = jul,
+  adsnote = {Provided by the SAO/NASA Astrophysics Data System},
+  adsurl = {http://adsabs.harvard.edu/abs/2007Icar..189..196L},
+  doi = {10.1016/j.icarus.2007.01.004},
+  eprint = {arXiv:astro-ph/0701544}
+}
+
+@INPROCEEDINGS{Lindegren2008,
+  author = {{Lindegren}, L. and {Babusiaux}, C. and {Bailer-Jones}, C. and {Bastian},
+	U. and {Brown}, A.~G.~A. and {Cropper}, M. and {H{\o}g}, E. and {Jordi},
+	C. and {Katz}, D. and {van Leeuwen}, F. and {Luri}, X. and {Mignard},
+	F. and {de Bruijne}, J.~H.~J. and {Prusti}, T.},
+  title = {{The Gaia mission: science, organization and present status}},
+  booktitle = {IAU Symposium},
+  year = {2008},
+  editor = {{Jin}, W.~J. and {Platais}, I. and {Perryman}, M.~A.~C.},
+  volume = {248},
+  series = {IAU Symposium},
+  pages = {217-223},
+  month = jul,
+  adsnote = {Provided by the SAO/NASA Astrophysics Data System},
+  adsurl = {http://adsabs.harvard.edu/abs/2008IAUS..248..217L},
+  doi = {10.1017/S1743921308019133},
+  keywords = {astrometry, Galaxy: kinematics and dynamics, planetary systems, relativity,
+	space vehicles, stars: fundamental parameters, techniques: photometric,
+	techniques: radial velocities}
+}
+
+@ARTICLE{Lissauer1993,
+  author = {{Lissauer}, J.~J.},
+  title = {{Planet formation}},
+  journal = {\araa},
+  year = {1993},
+  volume = {31},
+  pages = {129-174},
+  adsnote = {Provided by the SAO/NASA Astrophysics Data System},
+  adsurl = {http://adsabs.harvard.edu/abs/1993ARA%26A..31..129L},
+  doi = {10.1146/annurev.aa.31.090193.001021},
+  keywords = {PLANETARY EVOLUTION, PLANETARY SYSTEMS, SOLAR SYSTEM EVOLUTION, TERRESTRIAL
+	PLANETS, ORBITAL MECHANICS, PLANETOLOGY}
+}
+
+@ARTICLE{Lissauer2011,
+  author = {{Lissauer}, J.~J. and {Fabrycky}, D.~C. and {Ford}, E.~B. and {Borucki},
+	W.~J. and {Fressin}, F. and {Marcy}, G.~W. and {Orosz}, J.~A. and
+	{Rowe}, J.~F. and {Torres}, G. and {Welsh}, W.~F. and {Batalha},
+	N.~M. and {Bryson}, S.~T. and {Buchhave}, L.~A. and {Caldwell}, D.~A.
+	and {Carter}, J.~A. and {Charbonneau}, D. and {Christiansen}, J.~L.
+	and {Cochran}, W.~D. and {Desert}, J.-M. and {Dunham}, E.~W. and
+	{Fanelli}, M.~N. and {Fortney}, J.~J. and {Gautier}, III, T.~N. and
+	{Geary}, J.~C. and {Gilliland}, R.~L. and {Haas}, M.~R. and {Hall},
+	J.~R. and {Holman}, M.~J. and {Koch}, D.~G. and {Latham}, D.~W. and
+	{Lopez}, E. and {McCauliff}, S. and {Miller}, N. and {Morehead},
+	R.~C. and {Quintana}, E.~V. and {Ragozzine}, D. and {Sasselov}, D.
+	and {Short}, D.~R. and {Steffen}, J.~H.},
+  title = {{A closely packed system of low-mass, low-density planets transiting
+	Kepler-11}},
+  journal = {\nat},
+  year = {2011},
+  volume = {470},
+  pages = {53-58},
+  month = feb,
+  adsnote = {Provided by the SAO/NASA Astrophysics Data System},
+  adsurl = {http://adsabs.harvard.edu/abs/2011Natur.470...53L},
+  archiveprefix = {arXiv},
+  doi = {10.1038/nature09760},
+  eprint = {1102.0291},
+  primaryclass = {astro-ph.EP}
+}
+
+@ARTICLE{Lithwick2012,
+  author = {{Lithwick}, Y. and {Xie}, J. and {Wu}, Y.},
+  title = {{Extracting Planet Mass and Eccentricity from TTV Data}},
+  journal = {\apj},
+  year = {2012},
+  volume = {761},
+  pages = {122},
+  month = dec,
+  eid = {122},
+  adsnote = {Provided by the SAO/NASA Astrophysics Data System},
+  adsurl = {http://adsabs.harvard.edu/abs/2012ApJ...761..122L},
+  archiveprefix = {arXiv},
+  doi = {10.1088/0004-637X/761/2/122},
+  eprint = {1207.4192},
+  keywords = {planets and satellites: fundamental parameters },
+  primaryclass = {astro-ph.EP}
+}
+
+@ARTICLE{MacKenty2010,
+  author = {MacKenty, John W. and Kimble, Randy A. and O'Connell, Robert W. and
+	Townsend, Jacqueline A.},
+  title = {On-orbit performance of HST Wide Field Camera 3},
+  year = {2010},
+  pages = {77310Z-77310Z-12},
+  doi = {10.1117/12.857533},
+  url = { + http://dx.doi.org/10.1117/12.857533}
+}
+
+@ARTICLE{Mayor2012,
+  author = {M. Mayor and D. Queloz},
+  title = {From 51 Peg to Earth-type planets},
+  journal = {New Astronomy Reviews},
+  year = {2012},
+  volume = {56},
+  pages = {19 - 24},
+  number = {1},
+  doi = {10.1016/j.newar.2011.06.005},
+  issn = {1387-6473},
+  url = {http://www.sciencedirect.com/science/article/pii/S1387647311000443}
+}
+
+@ARTICLE{Mayor2011,
+  author = {{Mayor}, M. and {Marmier}, M. and {Lovis}, C. and {Udry}, S. and
+	{S{\'e}gransan}, D. and {Pepe}, F. and {Benz}, W. and {Bertaux},
+	J.~-. and {Bouchy}, F. and {Dumusque}, X. and {Lo Curto}, G. and
+	{Mordasini}, C. and {Queloz}, D. and {Santos}, N.~C.},
+  title = {{The HARPS search for southern extra-solar planets XXXIV. Occurrence,
+	mass distribution and orbital properties of super-Earths and Neptune-mass
+	planets}},
+  journal = {ArXiv e-prints},
+  year = {2011},
+  month = sep,
+  adsnote = {Provided by the SAO/NASA Astrophysics Data System},
+  adsurl = {http://adsabs.harvard.edu/abs/2011arXiv1109.2497M},
+  archiveprefix = {arXiv},
+  eprint = {1109.2497},
+  keywords = {Astrophysics - Earth and Planetary Astrophysics, Astrophysics - Solar
+	and Stellar Astrophysics},
+  primaryclass = {astro-ph.EP}
+}
+
+@ARTICLE{Mayor1995,
+  author = {{Mayor}, M. and {Queloz}, D.},
+  title = {{A Jupiter-mass companion to a solar-type star}},
+  journal = {\nat},
+  year = {1995},
+  volume = {378},
+  pages = {355-359},
+  month = nov,
+  adsnote = {Provided by the SAO/NASA Astrophysics Data System},
+  adsurl = {http://adsabs.harvard.edu/abs/1995Natur.378..355M},
+  doi = {10.1038/378355a0}
+}
+
+@TECHREPORT{McCarthy2004,
+  author = {{McCarthy}, D. and {Gerard}, P.},
+  title = {IERS Conventions (2003)},
+  institution = {IERS Technical Note ; 32},
+  year = {2004},
+  url = {http://www.iers.org/IERS/EN/Publications/TechnicalNotes/tn32.html}
+}
+
+@BOOK{meeus1988astronomical,
+  title = {Astronomical formulae for calculators},
+  publisher = {Willmann-Bell},
+  year = {1988},
+  author = {Meeus, J.},
+  isbn = {9780943396224},
+  lccn = {88027876},
+  url = {http://books.google.ch/books?id=u3PvAAAAMAAJ}
+}
+
+@ARTICLE{Mordasini2009,
+  author = {{Mordasini}, C. and {Alibert}, Y. and {Benz}, W. and {Naef}, D. },
+  title = {{Extrasolar planet population synthesis. II. Statistical comparison
+	with observations}},
+  journal = {\aap},
+  year = {2009},
+  volume = {501},
+  pages = {1161-1184},
+  month = jul,
+  adsnote = {Provided by the SAO/NASA Astrophysics Data System},
+  adsurl = {http://adsabs.harvard.edu/abs/2009A%26A...501.1161M},
+  archiveprefix = {arXiv},
+  doi = {10.1051/0004-6361/200810697},
+  eprint = {0904.2542},
+  keywords = {planetary systems, planetary systems: formation, planetary systems:
+	protoplanetary disks, planets and satellites: formation, solar system:
+	formation},
+  primaryclass = {astro-ph.EP}
+}
+
+@ARTICLE{Mordasini2010,
+  author = {{Mordasini}, C. and {Klahr}, H. and {Alibert}, Y. and {Benz}, W.
+	and {Dittkrist}, K.-M.},
+  title = {{Theory of planet formation}},
+  journal = {ArXiv e-prints},
+  year = {2010},
+  month = dec,
+  adsnote = {Provided by the SAO/NASA Astrophysics Data System},
+  adsurl = {http://adsabs.harvard.edu/abs/2010arXiv1012.5281M},
+  archiveprefix = {arXiv},
+  eprint = {1012.5281},
+  keywords = {Astrophysics - Earth and Planetary Astrophysics},
+  primaryclass = {astro-ph.EP}
+}
+
+@ARTICLE{Muirhead2012,
+  author = {{Muirhead}, P.~S. and {Johnson}, J.~A. and {Apps}, K. and {Carter},
+	J.~A. and {Morton}, T.~D. and {Fabrycky}, D.~C. and {Pineda}, J.~S.
+	and {Bottom}, M. and {Rojas-Ayala}, B. and {Schlawin}, E. and {Hamren},
+	K. and {Covey}, K.~R. and {Crepp}, J.~R. and {Stassun}, K.~G. and
+	{Pepper}, J. and {Hebb}, L. and {Kirby}, E.~N. and {Howard}, A.~W.
+	and {Isaacson}, H.~T. and {Marcy}, G.~W. and {Levitan}, D. and {Diaz-Santos},
+	T. and {Armus}, L. and {Lloyd}, J.~P.},
+  title = {{Characterizing the Cool KOIs. III. KOI 961: A Small Star with Large
+	Proper Motion and Three Small Planets}},
+  journal = {\apj},
+  year = {2012},
+  volume = {747},
+  pages = {144},
+  month = mar,
+  eid = {144},
+  adsnote = {Provided by the SAO/NASA Astrophysics Data System},
+  adsurl = {http://adsabs.harvard.edu/abs/2012ApJ...747..144M},
+  archiveprefix = {arXiv},
+  doi = {10.1088/0004-637X/747/2/144},
+  eprint = {1201.2189},
+  keywords = {planetary systems, stars: fundamental parameters, stars: individual:
+	Barnard's Star KOI 961, stars: late-type, stars: low-mass},
+  primaryclass = {astro-ph.SR}
+}
+
+@TECHREPORT{Munari2013,
+  author = {{Munari}, M.},
+  title = {{CHEOPS CIS-TEL Stray Light Analysis}},
+  institution = {INAF},
+  year = {2013},
+  month = Apr
+}
+
+@TECHREPORT{Neubert2011,
+  author = {{Neubert}, J.},
+  title = {CHEOPS Stray Light Feasibility Study},
+  institution = {UniBern / Ingenieurb\"uro Neubert},
+  year = {2011}
+}
+
+@ARTICLE{Pepe2002,
+  author = {{Pepe}, F. and {Mayor}, M. and {Rupprecht}, G. and {Avila}, G. and
+	{Ballester}, P. and {Beckers}, J.-L. and {Benz}, W. and {Bertaux},
+	J.-L. and {Bouchy}, F. and {Buzzoni}, B. and {Cavadore}, C. and {Deiries},
+	S. and {Dekker}, H. and {Delabre}, B. and {D'Odorico}, S. and {Eckert},
+	W. and {Fischer}, J. and {Fleury}, M. and {George}, M. and {Gilliotte},
+	A. and {Gojak}, D. and {Guzman}, J.-C. and {Koch}, F. and {Kohler},
+	D. and {Kotzlowski}, H. and {Lacroix}, D. and {Le Merrer}, J. and
+	{Lizon}, J.-L. and {Lo Curto}, G. and {Longinotti}, A. and {Megevand},
+	D. and {Pasquini}, L. and {Petitpas}, P. and {Pichard}, M. and {Queloz},
+	D. and {Reyes}, J. and {Richaud}, P. and {Sivan}, J.-P. and {Sosnowska},
+	D. and {Soto}, R. and {Udry}, S. and {Ureta}, E. and {van Kesteren},
+	A. and {Weber}, L. and {Weilenmann}, U. and {Wicenec}, A. and {Wieland},
+	G. and {Christensen-Dalsgaard}, J. and {Dravins}, D. and {Hatzes},
+	A. and {K{\"u}rster}, M. and {Paresce}, F. and {Penny}, A.},
+  title = {{HARPS: ESO's coming planet searcher. Chasing exoplanets with the
+	La Silla 3.6-m telescope}},
+  journal = {The Messenger},
+  year = {2002},
+  volume = {110},
+  pages = {9-14},
+  month = dec,
+  adsnote = {Provided by the SAO/NASA Astrophysics Data System},
+  adsurl = {http://adsabs.harvard.edu/abs/2002Msngr.110....9P},
+  keywords = {Extrasolar Planets, Spectrographs}
+}
+
+@ARTICLE{Pompea1995,
+  author = {{Pompea}, S.~M.},
+  title = {{The Management of Stray Radiation Issues in Space Optical Systems}},
+  journal = {\ssr},
+  year = {1995},
+  volume = {74},
+  pages = {181-193},
+  month = oct,
+  adsnote = {Provided by the SAO/NASA Astrophysics Data System},
+  adsurl = {http://adsabs.harvard.edu/abs/1995SSRv...74..181P},
+  doi = {10.1007/BF00751269},
+  keywords = {Space optics, Telescope design, Instrument design, Instrumentation,
+	Stray light, Black surfaces, Baffles, Contamination, Scattering,
+	Bidirectional reflectance distribution function, Point source normalized
+	irradiance transmittance}
+}
+
+@ARTICLE{Paris2012,
+  author = {{P{\^a}ris}, I. and {Petitjean}, P. and {Aubourg}, {\'E}. and {Bailey},
+	S. and {Ross}, N.~P. and {Myers}, A.~D. and {Strauss}, M.~A. and
+	{Anderson}, S.~F. and {Arnau}, E. and {Bautista}, J. and {Bizyaev},
+	D. and {Bolton}, A.~S. and {Bovy}, J. and {Brandt}, W.~N. and {Brewington},
+	H. and {Browstein}, J.~R. and {Busca}, N. and {Capellupo}, D. and
+	{Carithers}, W. and {Croft}, R.~A.~C. and {Dawson}, K. and {Delubac},
+	T. and {Ebelke}, G. and {Eisenstein}, D.~J. and {Engelke}, P. and
+	{Fan}, X. and {Filiz Ak}, N. and {Finley}, H. and {Font-Ribera},
+	A. and {Ge}, J. and {Gibson}, R.~R. and {Hall}, P.~B. and {Hamann},
+	F. and {Hennawi}, J.~F. and {Ho}, S. and {Hogg}, D.~W. and {Ivezi{\'c}},
+	{\v Z}. and {Jiang}, L. and {Kimball}, A.~E. and {Kirkby}, D. and
+	{Kirkpatrick}, J.~A. and {Lee}, K.-G. and {Le Goff}, J.-M. and {Lundgren},
+	B. and {MacLeod}, C.~L. and {Malanushenko}, E. and {Malanushenko},
+	V. and {Maraston}, C. and {McGreer}, I.~D. and {McMahon}, R.~G. and
+	{Miralda-Escud{\'e}}, J. and {Muna}, D. and {Noterdaeme}, P. and
+	{Oravetz}, D. and {Palanque-Delabrouille}, N. and {Pan}, K. and {Perez-Fournon},
+	I. and {Pieri}, M.~M. and {Richards}, G.~T. and {Rollinde}, E. and
+	{Sheldon}, E.~S. and {Schlegel}, D.~J. and {Schneider}, D.~P. and
+	{Slosar}, A. and {Shelden}, A. and {Shen}, Y. and {Simmons}, A. and
+	{Snedden}, S. and {Suzuki}, N. and {Tinker}, J. and {Viel}, M. and
+	{Weaver}, B.~A. and {Weinberg}, D.~H. and {White}, M. and {Wood-Vasey},
+	W.~M. and {Y{\`e}che}, C.},
+  title = {{The Sloan Digital Sky Survey quasar catalog: ninth data release}},
+  journal = {\aap},
+  year = {2012},
+  volume = {548},
+  pages = {A66},
+  month = dec,
+  eid = {A66},
+  adsnote = {Provided by the SAO/NASA Astrophysics Data System},
+  adsurl = {http://adsabs.harvard.edu/abs/2012A%26A...548A..66P},
+  archiveprefix = {arXiv},
+  doi = {10.1051/0004-6361/201220142},
+  eprint = {1210.5166},
+  keywords = {catalogs, surveys, quasars: general},
+  primaryclass = {astro-ph.CO}
+}
+
+@INPROCEEDINGS{Ricker2010,
+  author = {{Ricker}, G.~R. and {Latham}, D.~W. and {Vanderspek}, R.~K. and {Ennico},
+	K.~A. and {Bakos}, G. and {Brown}, T.~M. and {Burgasser}, A.~J. and
+	{Charbonneau}, D. and {Clampin}, M. and {Deming}, L.~D. and {Doty},
+	J.~P. and {Dunham}, E.~W. and {Elliot}, J.~L. and {Holman}, M.~J.
+	and {Ida}, S. and {Jenkins}, J.~M. and {Jernigan}, J.~G. and {Kawai},
+	N. and {Laughlin}, G.~P. and {Lissauer}, J.~J. and {Martel}, F. and
+	{Sasselov}, D.~D. and {Schingler}, R.~H. and {Seager}, S. and {Torres},
+	G. and {Udry}, S. and {Villasenor}, J.~N. and {Winn}, J.~N. and {Worden},
+	S.~P.},
+  title = {{Transiting Exoplanet Survey Satellite (TESS)}},
+  booktitle = {American Astronomical Society Meeting Abstracts \#215},
+  year = {2010},
+  volume = {42},
+  series = {Bulletin of the American Astronomical Society},
+  pages = {450.06},
+  month = jan,
+  note = {\emph{plus private communications in May 2013}},
+  adsnote = {Provided by the SAO/NASA Astrophysics Data System},
+  adsurl = {http://adsabs.harvard.edu/abs/2010AAS...21545006R}
+}
+
+@ARTICLE{Roell2012,
+  author = {{Roell}, T. and {Neuh{\"a}user}, R. and {Seifahrt}, A. and {Mugrauer},
+	M. },
+  title = {{Extrasolar planets in stellar multiple systems}},
+  journal = {\aap},
+  year = {2012},
+  volume = {542},
+  pages = {A92},
+  month = jun,
+  eid = {A92},
+  adsnote = {Provided by the SAO/NASA Astrophysics Data System},
+  adsurl = {http://adsabs.harvard.edu/abs/2012A%26A...542A..92R},
+  archiveprefix = {arXiv},
+  doi = {10.1051/0004-6361/201118051},
+  eprint = {1204.4833},
+  keywords = {planets and satellites: general, binaries: general, planetary systems},
+  primaryclass = {astro-ph.SR}
+}
+
+@ARTICLE{Sawyer1976,
+  author = {{Sawyer}, D.~M. and {Vette}, J.~I.},
+  title = {{AP-8 trapped proton environment for solar maximum and solar minimum}},
+  journal = {NASA STI/Recon Technical Report N},
+  year = {1976},
+  volume = {77},
+  pages = {18983},
+  month = dec,
+  adsnote = {Provided by the SAO/NASA Astrophysics Data System},
+  adsurl = {http://adsabs.harvard.edu/abs/1976STIN...7718983S},
+  keywords = {COMPUTER PROGRAMS, PERIODIC VARIATIONS, PROTON FLUX DENSITY, SOLAR
+	FLUX, SOLAR PROTONS, TRAPPED PARTICLES, AZUR SATELLITE, DATA SYSTEMS,
+	MAGNETIC FIELDS, OV-3 SATELLITES, SOLAR CYCLES}
+}
+
+@ARTICLE{Sing2011,
+  author = {{Sing}, D.~K. and {Pont}, F. and {Aigrain}, S. and {Charbonneau},
+	D. and {D{\'e}sert}, J.-M. and {Gibson}, N. and {Gilliland}, R. and
+	{Hayek}, W. and {Henry}, G. and {Knutson}, H. and {Lecavelier Des
+	Etangs}, A. and {Mazeh}, T. and {Shporer}, A.},
+  title = {{Hubble Space Telescope transmission spectroscopy of the exoplanet
+	HD 189733b: high-altitude atmospheric haze in the optical and near-ultraviolet
+	with STIS}},
+  journal = {\mnras},
+  year = {2011},
+  volume = {416},
+  pages = {1443-1455},
+  month = sep,
+  adsnote = {Provided by the SAO/NASA Astrophysics Data System},
+  adsurl = {http://adsabs.harvard.edu/abs/2011MNRAS.416.1443S},
+  archiveprefix = {arXiv},
+  doi = {10.1111/j.1365-2966.2011.19142.x},
+  eprint = {1103.0026},
+  keywords = {techniques: spectroscopic, stars: individual: HD 189733, planetary
+	systems},
+  primaryclass = {astro-ph.EP}
+}
+
+@ARTICLE{Sotin2007337,
+  author = {C. Sotin and O. Grasset and A. Mocquet},
+  title = {{Mass–radius curve for extrasolar Earth-like planets and ocean planets}},
+  journal = {Icarus },
+  year = {2007},
+  volume = {191},
+  pages = {337 - 351},
+  number = {1},
+  doi = {10.1016/j.icarus.2007.04.006},
+  issn = {0019-1035},
+  keywords = {Extrasolar planets},
+  url = {http://www.sciencedirect.com/science/article/pii/S0019103507001601}
+}
+
+@ARTICLE{Steffen2013,
+  author = {{Steffen}, J.~H. and {Fabrycky}, D.~C. and {Agol}, E. and {Ford},
+	E.~B. and {Morehead}, R.~C. and {Cochran}, W.~D. and {Lissauer},
+	J.~J. and {Adams}, E.~R. and {Borucki}, W.~J. and {Bryson}, S. and
+	{Caldwell}, D.~A. and {Dupree}, A. and {Jenkins}, J.~M. and {Robertson},
+	P. and {Rowe}, J.~F. and {Seader}, S. and {Thompson}, S. and {Twicken},
+	J.~D.},
+  title = {{Transit timing observations from Kepler - VII. Confirmation of 27
+	planets in 13 multiplanet systems via transit timing variations and
+	orbital stability}},
+  journal = {\mnras},
+  year = {2013},
+  volume = {428},
+  pages = {1077-1087},
+  month = jan,
+  adsnote = {Provided by the SAO/NASA Astrophysics Data System},
+  adsurl = {http://adsabs.harvard.edu/abs/2013MNRAS.428.1077S},
+  archiveprefix = {arXiv},
+  doi = {10.1093/mnras/sts090},
+  eprint = {1208.3499},
+  keywords = {methods: data analysis, techniques: photometric, celestial mechanics},
+  primaryclass = {astro-ph.EP}
+}
+
+@ARTICLE{Stevens2013,
+  author = {{Stevens}, D.~J. and {Gaudi}, B.~S.},
+  title = {{A Posteriori Transit Probabilities}},
+  journal = {ArXiv e-prints},
+  year = {2013},
+  month = may,
+  adsnote = {Provided by the SAO/NASA Astrophysics Data System},
+  adsurl = {http://adsabs.harvard.edu/abs/2013arXiv1305.1298S},
+  archiveprefix = {arXiv},
+  eprint = {1305.1298},
+  keywords = {Astrophysics - Earth and Planetary Astrophysics},
+  primaryclass = {astro-ph.EP}
+}
+
+@ARTICLE{Sumi2011,
+  author = {{Sumi}, T. and {Kamiya}, K. and {Bennett}, D.~P. and {Bond}, I.~A.
+	and {Abe}, F. and {Botzler}, C.~S. and {Fukui}, A. and {Furusawa},
+	K. and {Hearnshaw}, J.~B. and {Itow}, Y. and {Kilmartin}, P.~M. and
+	{Korpela}, A. and {Lin}, W. and {Ling}, C.~H. and {Masuda}, K. and
+	{Matsubara}, Y. and {Miyake}, N. and {Motomura}, M. and {Muraki},
+	Y. and {Nagaya}, M. and {Nakamura}, S. and {Ohnishi}, K. and {Okumura},
+	T. and {Perrott}, Y.~C. and {Rattenbury}, N. and {Saito}, T. and
+	{Sako}, T. and {Sullivan}, D.~J. and {Sweatman}, W.~L. and {Tristram},
+	P.~J. and {Udalski}, A. and {Szyma{\'n}ski}, M.~K. and {Kubiak},
+	M. and {Pietrzy{\'n}ski}, G. and {Poleski}, R. and {Soszy{\'n}ski},
+	I. and {Wyrzykowski}, {\L}. and {Ulaczyk}, K. and {Microlensing Observations
+	in Astrophysics (MOA) Collaboration} },
+  title = {{Unbound or distant planetary mass population detected by gravitational
+	microlensing}},
+  journal = {\nat},
+  year = {2011},
+  volume = {473},
+  pages = {349-352},
+  month = may,
+  adsnote = {Provided by the SAO/NASA Astrophysics Data System},
+  adsurl = {http://adsabs.harvard.edu/abs/2011Natur.473..349S},
+  archiveprefix = {arXiv},
+  doi = {10.1038/nature10092},
+  eprint = {1105.3544},
+  primaryclass = {astro-ph.EP}
+}
+
+@INPROCEEDINGS{Tessenyi2010,
+  author = {{Tessenyi}, M.},
+  title = {{ECHO - the Exoplanet Characterisation Observatory}},
+  booktitle = {AAS/Division for Planetary Sciences Meeting Abstracts \#42},
+  year = {2010},
+  volume = {42},
+  series = {AAS/Division for Planetary Sciences Meeting Abstracts},
+  pages = {27.33},
+  month = oct,
+  adsnote = {Provided by the SAO/NASA Astrophysics Data System},
+  adsurl = {http://adsabs.harvard.edu/abs/2010DPS....42.2733T}
+}
+
+@ELECTRONIC{SunAlmanac2012,
+  author = {{U.S. Naval Observatory}},
+  month = {Nov},
+  year = {2012},
+  title = {{Approximate Solar Coordinates}},
+  note = {\httplink{http://aa.usno.navy.mil/faq/docs/SunApprox.php}}
+}
+
+@ARTICLE{Udry2007,
+  author = {{Udry}, S. and {Santos}, N.~C.},
+  title = {{Statistical Properties of Exoplanets}},
+  journal = {\araa},
+  year = {2007},
+  volume = {45},
+  pages = {397-439},
+  month = sep,
+  adsnote = {Provided by the SAO/NASA Astrophysics Data System},
+  adsurl = {http://adsabs.harvard.edu/abs/2007ARA%26A..45..397U},
+  doi = {10.1146/annurev.astro.45.051806.110529}
+}
+
+@ARTICLE{Valencia2010,
+  author = {{Valencia}, D. and {Ikoma}, M. and {Guillot}, T. and {Nettelmann},
+	N.},
+  title = {{Composition and fate of short-period super-Earths. The case of CoRoT-7b}},
+  journal = {\aap},
+  year = {2010},
+  volume = {516},
+  pages = {A20},
+  month = jun,
+  eid = {A20},
+  adsnote = {Provided by the SAO/NASA Astrophysics Data System},
+  adsurl = {http://adsabs.harvard.edu/abs/2010A%26A...516A..20V},
+  archiveprefix = {arXiv},
+  doi = {10.1051/0004-6361/200912839},
+  eprint = {0907.3067},
+  keywords = {planets and satellites: individual: CoRoT-7b},
+  primaryclass = {astro-ph.EP}
+}
+
+@ARTICLE{Vincenty1975,
+  author = {{Vincenty}, T.},
+  title = {{Direct and Inverse Solutions of Geodesics on the Ellipsoid with
+	application of nested equations}},
+  journal = {Survey Review},
+  year = {1975},
+  volume = {XXIII (misprinted as XXII) (176)},
+  pages = {88--93}
+}
+
+@ARTICLE{Wagner2012,
+  author = {{Wagner}, F.~W. and {Tosi}, N. and {Sohl}, F. and {Rauer}, H. and
+	{Spohn}, T.},
+  title = {{Rocky super-Earth interiors. Structure and internal dynamics of
+	CoRoT-7b and Kepler-10b}},
+  journal = {\aap},
+  year = {2012},
+  volume = {541},
+  pages = {A103},
+  month = may,
+  eid = {A103},
+  adsnote = {Provided by the SAO/NASA Astrophysics Data System},
+  adsurl = {http://adsabs.harvard.edu/abs/2012A%26A...541A.103W},
+  doi = {10.1051/0004-6361/201118441},
+  keywords = {planets and satellites: interiors, planets and satellites: composition,
+	planets and satellites: individual: CoRoT-7b, planets and satellites:
+	individual: Kepler-10b}
+}
+
+@BOOK{Walt1994,
+  title = {Introduction to geomagnetically trapped radiation},
+  year = {1994},
+  author = {{Walt}, M.},
+  volume = {10},
+  series = {Camb.~Atmos.~Space Sci.~Ser., Vol.~10,},
+  keywords = {Earth Radiation Belts: Charged Particles, Earth Radiation Belts: Cosmic
+	Rays, Geomagnetic Field}
+}
+
+@INPROCEEDINGS{Wheatley2013,
+  author = {{Wheatley}, P.~J. and {Pollacco}, D.~L. and {Queloz}, D. and {Rauer},
+	H. and {Watson}, C.~A. and {West}, R.~G. and {Chazelas}, B. and {Louden},
+	T.~M. and {Walker}, S. and {Bannister}, N. and {Bento}, J. and {Burleigh},
+	M. and {Cabrera}, J. and {Eigm{\"u}ller}, P. and {Erikson}, A. and
+	{Genolet}, L. and {Goad}, M. and {Grange}, A. and {Jord{\'a}n}, A.
+	and {Lawrie}, K. and {McCormac}, J. and {Neveu}, M. },
+  title = {{The Next Generation Transit Survey (NGTS)}},
+  booktitle = {European Physical Journal Web of Conferences},
+  year = {2013},
+  volume = {47},
+  series = {European Physical Journal Web of Conferences},
+  pages = {13002},
+  month = apr,
+  adsnote = {Provided by the SAO/NASA Astrophysics Data System},
+  adsurl = {http://adsabs.harvard.edu/abs/2013EPJWC..4713002W},
+  archiveprefix = {arXiv},
+  doi = {10.1051/epjconf/20134713002},
+  eid = {13002},
+  eprint = {1302.6592},
+  primaryclass = {astro-ph.EP}
+}
+
+@ARTICLE{Winn2010,
+  author = {{Winn}, J.~N.},
+  title = {{Transits and Occultations}},
+  journal = {ArXiv e-prints},
+  year = {2010},
+  month = jan,
+  adsnote = {Provided by the SAO/NASA Astrophysics Data System},
+  adsurl = {http://adsabs.harvard.edu/abs/2010arXiv1001.2010W},
+  archiveprefix = {arXiv},
+  eprint = {1001.2010},
+  keywords = {Astrophysics - Earth and Planetary Astrophysics},
+  primaryclass = {astro-ph.EP}
+}
+
+@ARTICLE{Wright2011,
+  author = {{Wright}, J.~T. and {Fakhouri}, O. and {Marcy}, G.~W. and {Han},
+	E. and {Feng}, Y. and {Johnson}, J.~A. and {Howard}, A.~W. and {Fischer},
+	D.~A. and {Valenti}, J.~A. and {Anderson}, J. and {Piskunov}, N.},
+  title = {{The Exoplanet Orbit Database}},
+  journal = {\pasp},
+  year = {2011},
+  volume = {123},
+  pages = {412-422},
+  month = apr,
+  adsnote = {Provided by the SAO/NASA Astrophysics Data System},
+  adsurl = {http://adsabs.harvard.edu/abs/2011PASP..123..412W},
+  archiveprefix = {arXiv},
+  doi = {10.1086/659427},
+  eprint = {1012.5676},
+  keywords = {Extrasolar Planets},
+  primaryclass = {astro-ph.SR}
+}
+
+@INBOOK{Wright2013,
+  chapter = {10},
+  pages = {489-540},
+  title = {{Exoplanet Detection Methods}},
+  publisher = {Springer},
+  year = {2013},
+  editor = {{Oswalt}, T.~D. and {McLean}, I.~S.},
+  author = {{Wright}, J.~T. and {Gaudi}, B.~S.},
+  adsnote = {Provided by the SAO/NASA Astrophysics Data System},
+  adsurl = {http://adsabs.harvard.edu/abs/2013psss.book..489W},
+  booktitle = {Planets, Stars and Stellar Systems, by Oswalt, Terry D.; French,
+	Linda M.; Kalas, Paul, ISBN 978-94-007-5605-2.~Springer Science+Business
+	Media Dordrecht, 2013, p.~489},
+  doi = {10.1007/978-94-007-5606-9_10},
+  keywords = {Physics}
+}
+
+@comment{jabref-meta: selector_publisher:}
+
+@comment{jabref-meta: selector_author:}
+
+@comment{jabref-meta: selector_journal:}
+
+@comment{jabref-meta: selector_keywords:}
+

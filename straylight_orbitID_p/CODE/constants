@@ -1,0 +1,45 @@
+c ==============================================================================
+c PHYSICAL CONSTANTS
+
+	double precision pi
+	parameter (pi = 3.14159d0)
+
+	double precision RAD 
+	parameter (RAD = 57.29578d0)             !1 rad = 57.3 grad
+
+	double precision AU
+	parameter (AU = 149.59787d11)            !AU in cm
+
+	double precision R_Earth
+	parameter (R_Earth = 6378.14d5)            !Earth radius in cm 
+	
+	double precision KM
+	parameter (KM = 1.d5)                    !km into cm
+	
+	double precision M2
+	parameter (M2 = 1.d4)                    !m2 into cm2
+
+	double precision albedo
+	parameter(albedo = 1.d0)                 !assumed albedo of the Earth
+
+	double precision solar_constant
+	parameter (solar_constant = 3.04d21)     !solar constant 1359.d0 [W/m2], visible(400-1100 nm): 880 [W/m2], photons: 3.04e21
+
+c ==============================================================================
+c DEFINTION OF KEYWORDS
+
+	double precision day
+	parameter (day = 1.d0)    !designation for illuminated Earth surface elements
+
+	double precision illum
+      parameter (illum = 1.d0)  !designation for illuminated Earth surface elements seen from the satellite             
+
+	double precision night
+	parameter (night = 0.d0)  !designation for not illuminated Earth surface elements
+      
+	double precision hit 
+	parameter (hit = 1.d0)    !designation for the photons that hit the telescope
+
+	double precision seen
+	parameter (seen = 1.d0)   !designation for Earth surface elements seen form the satellite
+

@@ -1,0 +1,88 @@
+\begin{figure*}
+\begin{center}
+% Define block styles
+%\tikzstyle{decision} = [diamond, draw, fill=blue!20, text width=4.5em, text badly centered, node distance=3cm, inner sep=0pt]
+\tikzstyle{decision} = [diamond, draw, fill=gray!20, text width=4.5em, text badly centered, node distance=2.cm, inner sep=0pt]
+\tikzstyle{block} = [rectangle, draw, text width=7.5em, rounded corners, minimum height=2em, node distance=3.5cm]
+\tikzstyle{algo} = [rectangle, draw, fill=gray!20, text width=5em, node distance=1.5cm]
+\tikzstyle{algolarge} = [rectangle, draw, fill=gray!20, text width=7em, node distance=2.5cm]
+\tikzstyle{algoverylarge} = [rectangle, draw, fill=gray!20, text width=10em, node distance=2.5cm]
+\tikzstyle{code} = [rectangle, draw, fill=red!20, text width=5em, text centered, rounded corners, minimum height=5em, node distance=2.5cm]
+\tikzstyle{line} = [draw, -latex']
+\tikzstyle{cloud} = [draw, ellipse, text width=5em]
+   
+\resizebox{!}{1\textwidth}{
+\begin{tikzpicture}[scale=2, node distance = 2.5cm, auto]
+  \node [block] (raw_maps) {Observable\\regions};
+  \node [block, left of=raw_maps] (constraints) {Constraints\\\textbullet\ Sun\\\textbullet\ Earth\\\textbullet\ SL angle\\\textbullet\ Moon};
+  \node [block, right of=raw_maps] (stk) {STK Simulator\\\textbullet\ Orbit\\\textbullet\ Sun \\ \textbullet\ Moon};
+  \node [code, below of=raw_maps] (sl) {Stray light pipeline\\\S\ref{numercis:stray_light.f} \& \ref{sec:numerics-pipeline}};
+  \node [block, right of=sl] (tolerance) {\textbullet\ Tolerance $\epsilon$\\\textbullet\ Orbit\\\textbullet\ Sun};
+  \node [algo, below of=sl] (orbit_0) {$i:=1$};
+  \node [algo, below of=orbit_0] (orbit_i) {Compute orbit $i$};
+  
+  \node [algoverylarge, left of=orbit_0, node distance=6cm] (for) {\emph{for every minutes:}};
+  \node [algoverylarge, below of=for, node distance=1cm] (c1) {Day/night on Earth};
+  \node [algoverylarge, below of=c1, node distance=1cm] (c2) {Illumination gradient};
+  \node [algoverylarge, below of=c2, node distance=1cm] (c3) {$\oplus$ surface seen by sat.};
+  \node [algoverylarge, below of=c3, node distance=1cm] (c4) {\emph{for every visible point:}};
+  \node [algoverylarge, below of=c4, node distance=1cm] (c5) {Contributing surfaces};
+  \node [algoverylarge, below of=c5, node distance=1cm] (c6) {Convolve photons flux by PST};
+  
+  
+  \node [algo, below of=orbit_i] (orbit_next) {Compute orbit $i+\Delta i$};
+  \node [decision, below of=orbit_next] (step) {$\max \Delta <\epsilon$};
+  \node [algolarge, below left of=step] (go) {$\Delta i:=
+  \begin{cases}2\Delta i&\textcircled{a}\\
+	      \Delta i&\textcircled{b}
+	      \end{cases}$};
+  \node [algolarge, below right of=step] (nogo) {$\Delta i:=\begin{cases}\frac{\Delta i}{2} & \textcircled{c}\\1& \textcircled{d}\end{cases}$};
+  \node [decision, below left of=nogo, node distance=2.5cm] (imax) {$i+\Delta i>i_{\max}$};
+  \node [algo, right of=imax, node distance=4.5cm] (iplus) {$i:=i+\Delta i$};
+  \node [code, below of=imax, node distance=3cm] (analysis) {Stray light analysis\\ \S\ref{sec:numerics-analysis}};
+  \node [block, right of=analysis] (params) {\textbullet\ range mag\\\textbullet\ PSF\\\textbullet\ $t,t_\text{obs}$\\\textbullet\ \dots};
+  \node [block, below of=analysis, below of=analysis, node distance=1.2cm] (A) {Sky maps of stray light};
+  \node [block, left of=A] (B) {Stray light flux variations};
+  \node [block, left of=B] (C) {Orbits \& error evolution};
+  \node [block, right of=A] (D) {Maps cumulative exposure};
+  \node [block, right of=D] (E) {Planning \& transit detection};
+
+
+   \path [line] (constraints)--(raw_maps);
+   \path [line] (stk)--(raw_maps);
+   \path [line] (raw_maps)--(sl);
+   
+   \path [line] (sl) -- (orbit_0);
+   \path [line] (tolerance)--(sl);
+   \path [line] (orbit_0) -- (orbit_i);
+   \path [line] (orbit_i) -- (orbit_next);
+   
+   \path [line] (orbit_i.west) -- (for.east);
+   \path [line] (for) to (c1);
+   \path [line] (c1) to (c2);
+   \path [line] (c2) to (c3);
+   \path [line] (c3) to (c4);
+   \path [line] (c4) to (c5);
+   \path [line] (c5) to (c6);
+   \path [line] (c6.east) to (orbit_i.west);
+   
+   \path [line] (orbit_next) -- (step);
+   \path [line] (step) -- node {yes} (go);
+   \path [line] (step) -- node {no} (nogo);
+   \path [line] (go) -- (imax);
+   \path [line] (nogo) -- (imax);
+   \path [line] (imax) -- node {no} (iplus);
+   \path [line] (iplus.north) to (orbit_i.east);
+   \path [line] (imax.south) to node {yes} (analysis);
+    \path [line] (params) -- (analysis) ;
+
+    \path [line] (analysis.south) to (A);
+    \path [line] (analysis.south) to (B);
+    \path [line] (analysis.south) to (C);
+    \path [line] (analysis.south) to (D);
+    \path [line] (analysis.south) to (E);
+\end{tikzpicture}
+}
+\caption{Flow chart of the project. Red blocks represent the different code suites used in this project. Gray cells depict algorithmic instructions and white either inputs or outputs of the project. \label{fig:data-flow} STK is the commercial software used to generate the orbit of the satellite. $i$ is the orbit number, $\Delta i$ represent the orbit step size and $i_{\max}$. $\max\Delta$ is the maximal (relative) difference in the equivalent magnitude. The conditions on the orbit step size are $\textcircled{a}$ if $\Delta i$ is smaller than a maximum orbit size; $\textcircled{b}$ else; $\textcircled{c}$ if $\frac{\Delta i}{2}\geq 1$; $\textcircled{d}$ else.}
+\end{center}
+\end{figure*}

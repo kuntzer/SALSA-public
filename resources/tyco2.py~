@@ -1,0 +1,45 @@
+###########################################################################
+def do_kdtree(combined_x_y_arrays,points):
+    mytree = scipy.spatial.cKDTree(combined_x_y_arrays)
+    dist, indexes = mytree.query(points)
+    return dist, indexes
+###########################################################################
+
+def SphericalDistance(ra1,dec1,ra2,dec2):
+	'''Compute the distance on the great circle. Computations are based upon http://en.wikipedia.org/wiki/Great-circle_distance#Formulas'''
+	from numpy import sin, cos, arctan2, arccos
+	ls = ra1
+	lf = ra2
+
+	ps = dec1
+	pf = dec2
+
+	dl = lf-ls
+	dp = pf-ps
+
+	num1 = cos(pf)*sin(dl)
+	num2 = (cos(ps)*sin(pf) - sin(ps)*cos(pf)*cos(dl))
+
+	den1 = sin(ps)*sin(pf)
+	den2 = cos(ps)*cos(pf)*cos(dl)
+
+	num = np.sqrt(num1 * num1 + num2*num2)
+	den = den1 + den2
+
+	return arctan2(num,den)
+###########################################################################
+
+def rad2arcmin(rad):
+	return rad * 10800. / np.pi
+
+def rad2sec(rad):
+	return rad * 648000. / np.pi
+
+def deg2arcmin(deg):
+	return deg * 60.
+
+def min_dist(FOV):
+	length = np.sqrt(FOV)
+	am = length * np.pi / 180.
+	return am * np.sqrt(2)/2
+
