@@ -22,9 +22,9 @@ import sys
 import time
 
 def init_folders(orbit_id):
-	folder_flux = '%d_flux/' % (orbit_id)
-	folder_figures= '%d_figures/' % (orbit_id)
-	folder_misc	= '%d_misc/' % (orbit_id)
+	folder_flux = '%s_flux/' % (orbit_id)
+	folder_figures= '%s_figures/' % (orbit_id)
+	folder_misc	= '%s_misc/' % (orbit_id)
 	return folder_flux, folder_figures, folder_misc
 
 def find_nearest(array,value):
@@ -155,9 +155,10 @@ def altitude2period(apogee,perigee):
 	a = const.R_Earth / 100. + (apogee+perigee)/2. * 1e3
 	return 2.*np.pi * np.sqrt(a*a*a/const.mu_Earth)  / 60.
 
-def load_map(orbit_no,folder='raw_maps'):
+def load_map(orbit_id,folder='absolute_map'):
 	import parameters as param
-	return np.loadtxt(folder+'/'+param.file_map+str(orbit_no)+'.dat',delimiter=',')	
+	import os
+	return np.loadtxt(os.path.join(folder,"%s%s.dat" % (param.file_map,orbit_id)))	
 
 def slice_map(map_obstot, minute, threshold=1e-5):
 	return map_obstot[abs(map_obstot[:,0]-minute) < threshold]

@@ -57,7 +57,7 @@ max_interruptions = 97
 mag_max = 12.
 
 # Take SAA into account?
-SAA = True
+SAA = False
 
 # Print much information ?
 verbose = False
@@ -74,7 +74,7 @@ SL_post_treat = True
 early_stop = False
 
 # Minimal # of days of obs (if consecutive == False), must be a list
-nb_obs_days = range(5,45,5)#range(10,110,10)#
+nb_obs_days = range(10,17,1)#range(5,45,5)#range(10,110,10)#
 
 # Minimal minutes to be observed per orbit (if consecutive == False)
 min_t_obs_per_orbit = 78
@@ -112,7 +112,7 @@ for nb_obs_day in nb_obs_days:
 
 	output=open(os.path.join(folder_misc,skycoverage_fname),"a") 
 
-	print 'ORBIT ID:\t\t%d\nPST factor:\t\t%d\nMin Days of Coverage:\t%d\nmin_t_obs_per_orbit\t%d\nMAGNITIUDE:\t\t%02.1f' % (orbit_id,pst_factor,nb_obs_day,min_t_obs_per_orbit, mag_max)
+	print 'ORBIT ID:\t\t%d\nPST factor:\t\t%d\nMin Days of Coverage:\t%d\nmin_t_obs_per_orbit\t%d\nMAGNITIUDE:\t\t%02.1f\nSAA :\t%g' % (orbit_id,pst_factor,nb_obs_day,min_t_obs_per_orbit, mag_max, SAA)
 
 	# loading data
 	sys.stdout.write("Loading worthy targets...\t")
@@ -215,6 +215,9 @@ for nb_obs_day in nb_obs_days:
 
 ###########################################################################
 # non-consecutive
+	count = 0
+	count_day=0
+	nogo_count=0
 	if not consecutive:
 		times = np.loadtxt('resources/minute_table_'+str(orbit_id)+'.dat', delimiter=',',dtype='Int32')
 		a_end_orbits = np.linspace(1,param.last_orbits[orbit_id],param.last_orbits[orbit_id])
@@ -239,7 +242,7 @@ for nb_obs_day in nb_obs_days:
 
 			# Initialise all variables
 			k = 0
-			t_obs_per_orbit = np.zeros(param.last_orbits[orbit_id])
+			t_obs_per_orbit = np.zeros(param.last_orbits[orbit_id]+1)
 
 		# iterate on the visibility (i.e. time when the target becomes visible)	
 			for k in range(0, len(visi)):
@@ -251,14 +254,40 @@ for nb_obs_day in nb_obs_days:
 				orbit = fast_minute2orbit(times, vis,orbit_id)
 				if orbit > param.last_orbits[orbit_id]: continue
 
+				#print orbit, fast_minute2orbit(times, ini,orbit_id)
+
 				a_end = a_end_orbits[orbit-1]
-				if a_end > ini:
+				if a_end >= ini:
 					t_obs_per_orbit[orbit-1] += ini-vis
 				else:	
 					t_obs_per_orbit[orbit-1] += a_end - vis
-					try:
-						t_obs_per_orbit[orbit] += ini-a_end
-					except IndexError: t_obs_per_orbit[orbit-1] += ini-a_end
+
+					orbit_currently_in=orbit
+					while True:
+						if fast_minute2orbit(times, ini,orbit_id)>orbit_currently_in:
+							#print fast_minute2orbit(times, ini,orbit_id),orbit_currently_in
+							#else: 
+							t_obs_per_orbit[orbit_currently_in]+=period
+						else:
+							#print orbit_currently_in, fast_minute2orbit(times, ini,orbit_id)
+							try: t_obs_per_orbit[orbit_currently_in]+=ini-a_end_orbits[orbit_currently_in-1]	
+							except:
+								pass
+							break
+						orbit_currently_in+=1
+						if orbit_currently_in>=param.last_orbits[orbit_id]-1:
+							t_obs_per_orbit[orbit_currently_in-2]+=ini-a_end_orbits[orbit_currently_in-2]	
+							
+						
+					'''
+					if orbit<param.last_orbits[orbit_id]:
+						if ini>a_end_orbits[orbit]:
+							t_obs_per_orbit[orbit] += a_end_orbits[orbit]-a_end
+							print a_end_orbits[orbit], ini, , 
+							t_obs_per_orbit[orbit+1] += ini-a_end_orbits[orbit]
+						else:
+							t_obs_per_orbit[orbit] += ini-a_end
+					else: t_obs_per_orbit[orbit-1] += ini-a_end'''
 	
 			sufficent_obs = np.where(t_obs_per_orbit>=min_t_obs_per_orbit)[0]
 			t_obs_per_orbit[t_obs_per_orbit<min_t_obs_per_orbit] = 0
@@ -285,9 +314,11 @@ for nb_obs_day in nb_obs_days:
 
 				if verbose: print '\nThere are %d independant days of observations' % sufficent_days
 
-#				print obs_orbit_tot[ii], nb_obs_day*(min_t_obs_per_orbit/period)
+				#print obs_orbit_tot[ii], nb_obs_day*(min_t_obs_per_orbit/period)
 
 				if obs_tot[ii]/24./60. >= nb_obs_day*(min_t_obs_per_orbit/period) and sufficent_days >= nb_obs_day :
+					count += 1
+					#print count
 					aini = fast_orbit2a_ini_vect(times, sufficent_obs+1, orbit_id)
 					start_obs[ii,:np.size(aini)] = aini
 					stop_obs[ii,:np.size(aini)] = aini + t_obs_per_orbit

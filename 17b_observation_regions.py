@@ -2,10 +2,10 @@
 =========================
 AIM:	Determines the time spent in one region of the sky.
 
-INPUT:	files: 	- <orbit_id>_<SL_angle>misc/ephemerids_obs<transit_duration>h_<max_interruptions>inter_V<mag_max><_SAA?>.npz (from 17....py
+INPUT:	files: 	- <orbit_id>_<SL_angle>misc/ephemerids_obs<transit_duration>h_<max_interruptions>inter_V<mag_max><_SAA?>.npz (from 17a...py
 	variables: see section PARAMETERS (below)
 
-OUTPUT: <none>
+OUTPUT: 'skycoverage_region_%dmin_V%3.1f%s.txt' % (min_t_obs_per_orbit,mag_max,note)
 
 CMD:	python 17b-observation_regions.py
 
@@ -56,7 +56,7 @@ max_interruptions = 97
 mag_max = 12.
 
 # Take SAA into account?
-SAA = True
+SAA = False
 
 # Print much information ?
 verbose = False
@@ -73,23 +73,21 @@ SL_post_treat = True
 early_stop = False
 
 # Minimal # of days of obs (if consecutive == False), must be a list
-nb_obs_days = [13]#range(10,110,10)#range(5,45,5)#
+nb_obs_days = range(10,17,1)#[13]#range(10,110,10)#
 
 # Minimal minutes to be observed per orbit (if consecutive == False)
-min_t_obs_per_orbit = 79
+min_t_obs_per_orbit = 78
 
 # This is a way to vary the results by multiplying the whole pst by a number.
 # This is very easy as if the pst is multiplied by a constant, it can be taken out of the
 # integral and only multplying the flux is equivalent to re-running all the simulations
 pst_factor=1.
 
-"""
-Examples:
-observation_region = geometry.Polygon(points=[(25, 2), (15, 3), (15, 7), (45, 7), (45, 2)])
-observation_region = geometry.Interval(axis='delta',min_val=-30,max_val=30])
-observation_region = geometry.Interval(axis='alpha',min_val=3.14,max_val=6.28],unit='rad')
-The points are in degree by default.
-"""
+#Examples:
+#observation_region = geometry.Polygon(points=[(25, 2), (15, 3), (15, 7), (45, 7), (45, 2)])
+#observation_region = geometry.Interval(axis='delta',min_val=-30,max_val=30])
+#observation_region = geometry.Interval(axis='alpha',min_val=3.14,max_val=6.28],unit='rad')
+#The points are in degree by default.
 observation_region=geometry.Interval(axis="delta",max_val=0) # Southern sky
 
 

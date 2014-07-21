@@ -39,7 +39,7 @@ from matplotlib.ticker import MaxNLocator, MultipleLocator, FormatStrFormatter
 ###########################################################################
 ### PARAMETERS
 # orbit_id
-orbit_id = 702
+orbit_id = 301
 
 # Show plots
 show = True
@@ -50,7 +50,7 @@ save = True
 # Fancy plots ?
 fancy = True
 
-threshold_obs_time = 50
+threshold_obs_time = 78
 
 # Magnitudes to plot
 mag = np.array([10.1,11.1,12.,12.1,12.2])

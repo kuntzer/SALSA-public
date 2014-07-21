@@ -65,10 +65,10 @@ t_acquisition = 3
 straylight = False
 
 # Maximum visible magnitude
-mag_max = 9. #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!<< params
+mag_max = 12. #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!<< params
 
 # Include SAA ?
-SAA = True
+SAA = False
 
 # This is a way to vary the results by multiplying the whole pst by a number.
 # This is very easy as if the pst is multiplied by a constant, it can be taken out of the

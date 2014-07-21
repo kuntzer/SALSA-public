@@ -32,7 +32,7 @@ from resources.TimeStepping import *
 ### PARAMETERS
 
 # Orbit id same as in 0-*.py
-orbit_id = 1001
+orbit_id = '620_35_AKTAR'
 
 # First orbit in data set
 orbit_ini = 1
@@ -81,7 +81,7 @@ for orbit in range(orbit_ini, orbit_end+1):
 
 	orbit_old = orbit
 
-	print 'Orbit %4d was computed for orbit ID %d, step %d' % (orbit, orbit_id, step)
+	print 'Orbit %4d was computed for orbit ID %s, step %d' % (orbit, orbit_id, step)
 
 	kk += 1
 

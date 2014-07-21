@@ -37,8 +37,8 @@ from resources.TimeStepping import *
 apogee = 800
 perigee= 800
 
-# orbit id (MUST BE AN INTEGER!)
-orbit_id = 1001
+# orbit id 
+orbit_id = '620_35_AKTAR'
  
 # 1, 2 or 3 (or, ...) into which folder ? Scheme is orbit_id_part/
 part = 1
@@ -59,14 +59,14 @@ adaptative_timestep = True
 min_step = 5
 
 # must be in straylight_xxx/ORBIT
-file_orbit = 'orbit_%d.dat' % orbit_id
-file_sun = 'sun_%d.dat' % orbit_id
-folder = 'raw_maps_%d' % orbit_id
+file_orbit = 'orbit_%s.dat' % orbit_id
+file_sun = 'sun_%s.dat' % orbit_id
+folder = 'absolute_map_%s' % orbit_id
 
 # Standard values are:
 # folder_flux = '%d_%d' % (orbit_id,part)
 # file_flux = 'flux_'
-folder_flux = '%d_%d' % (orbit_id,part)
+folder_flux = '%s_%d' % (orbit_id,part)
 file_flux = 'flux_'
 
 # Tolerance of the maximal magnitude difference (5% = 0.05)
@@ -83,11 +83,11 @@ monitor_angle_usage = False
 ######################################################################
 # INITIALISATION
 # path to stray light folder (containting CODE, OUTPUT, INPUT, ORBIT)
-path = 'straylight_%d_%d' % (orbit_id,part)
+path = 'straylight_%s_%d' % (orbit_id,part)
 
 # Says hi
 print '\nSALSA v%s' % const.version
-print 'Computing max. every %d orbits for orbit ID %d' % (orbit_step,orbit_id)
+print 'Computing max. every %d orbits for orbit ID %s' % (orbit_step,orbit_id)
 print '------------------------------------------------------'
 
 start = time.time()
@@ -136,7 +136,7 @@ orbit_current = orbit_ini
 preceeding = orbit_current
 former_step = orbit_step
 while (orbit_current <= orbit_end):
-	print '\n---------------- ORBIT %d --- ID %d ----------------------------' % (orbit_current, orbit_id)
+	print '\n---------------- ORBIT %d --- ID %s ----------------------------' % (orbit_current, orbit_id)
 	# Get the initial and final time
 	start_minute = time.time()
 	t_ini, t_end, a_ini, a_end = orbit2times(orbit_current,orbit_id)

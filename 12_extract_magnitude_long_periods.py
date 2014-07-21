@@ -51,11 +51,11 @@ minute_end = 1440*365
 orbits_file = 'orbits.dat'
 
 # Minimum consecutive observable time for plots
-threshold_obs_time = 50
+threshold_obs_time = 78
 
 # Take a minimum observation time per orbit and Minimum observable time per orbit (NON-CONSECUITIVE)
 min_obs_per_orbit = True
-threshold_obs_time_per_orbit = 50
+threshold_obs_time_per_orbit = 78
 
 # Time to acquire a target
 t_acquisition = 3
@@ -71,13 +71,13 @@ extension = '.dat'
 show = True
 
 # Include SAA ?
-SAA = True
+SAA = False
 
 # File name that contains the orbit used and the percentage of the sky unviewable because of SL
 namefile = 'cumultative_SL_forbidden_%d_mag_%02.1f.dat' % (threshold_obs_time, mag_max)
 
 # Factor in the SL post treatment correction ?
-SL_post_treat = False
+SL_post_treat = True
 
 # Factor in mirror efficiency for the equivalent star magnitude ?
 mirror_correction = True

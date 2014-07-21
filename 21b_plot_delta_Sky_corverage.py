@@ -40,7 +40,7 @@ from mpl_toolkits.basemap import Basemap
 ###########################################################################
 ### PARAMETERS
 orbit_id_ref=301
-orbit_id_other=1000
+orbit_id_other=301
 
 # Give fname without the extension !
 #sky_coverage_map_fname_ref = '301-sky_map-78-mag12-days10-to-40-accumulated' 
@@ -48,6 +48,9 @@ orbit_id_other=1000
 
 #sky_coverage_map_fname_ref = '301-sky_map-50-mag9-days10-to-90-accumulated'
 #sky_coverage_map_fname_other = '1000-sky_map-50-mag9-days10-to-90-accumulated'
+
+sky_coverage_map_fname_ref = '301-sky_map-78-mag12-days10-to-16_noSAA-obs_time'
+sky_coverage_map_fname_other = '301-sky_map-78-mag12-days10-to-16_SAA-obs_time'
 
 # Nice plots?
 fancy=True
@@ -78,7 +81,7 @@ ref[whereAreNaNs] = 0;
 whereAreNaNs = np.isnan(other);
 other[whereAreNaNs] = 0;
 delta = ref-other
-delta[delta == 0]=np.nan
+#delta[delta == 0]=np.nan
 
 ### Plotting
 # transform 0 into no plotting in the data matrix

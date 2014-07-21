@@ -36,7 +36,7 @@ def orbit2times(orbit,orbit_id):
 	'''
 	import numpy as np
 
-	times = np.loadtxt('resources/minute_table_%d.dat' % orbit_id, delimiter=',',dtype='Int32')
+	times = np.loadtxt('resources/minute_table_%s.dat' % orbit_id, delimiter=',',dtype='Int32')
 	return fast_orbit2times(times,orbit,orbit_id)
 
 def fast_orbit2day(times, orbit, orbit_id):

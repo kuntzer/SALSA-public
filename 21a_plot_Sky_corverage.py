@@ -40,7 +40,7 @@ from mpl_toolkits.basemap import Basemap
 ###########################################################################
 ### PARAMETERS
 # orbit_id
-orbit_id = 1000
+orbit_id = 301
 apogee = 700
 perigee = 700
 
@@ -54,12 +54,12 @@ minute_end = 1440*365/12
 orbits_file = 'orbits.dat'
 
 # Maximum visible magnitude
-mag_max = 9.
+mag_max = 12.
 
 # Min nb_obs_day
-min_nb_obs_day = 10
-max_nb_obs_day = 90
-step_nb_obs_day = 10
+min_nb_obs_day = 10#10
+max_nb_obs_day = 16#90
+step_nb_obs_day = 1#10
 
 # Plot a few stars as well ?
 stars=False
@@ -94,7 +94,7 @@ pst_factor = 1.
 consecutive = False
 
 # Minimal minutes to be observed per orbit (if consecutive = False)
-min_t_obs_per_orbit = 50
+min_t_obs_per_orbit = 78
 
 
 # File name for the input file (in a compressed binary Python format)
@@ -256,8 +256,8 @@ plt.yticks(np.arange(-80, 100, 20.))
 
 v = np.linspace(min_nb_obs_day,max_nb_obs_day, (max_nb_obs_day-min_nb_obs_day)/step_nb_obs_day+1, endpoint=True)
  
-cbar = plt.colorbar(CS, ticks=v)
-cbar.set_ticklabels(v)
+cbar = plt.colorbar(CS)#, ticks=v)
+#cbar.set_ticklabels(v)
 cbar.set_label(r'$\mathrm{Days}$')
 
 plt.xlabel('RA [deg]')
@@ -284,7 +284,8 @@ cbar.set_label(r'$\mathrm{Days}$')
 plt.xlabel('RA [deg]')
 plt.ylabel('Dec [deg]')
 ###########################################################################
-note = ''
+if not SAA: note = '_noSAA'
+else: note = '_SAA'
 if not pst_factor == 1.: note += '_%1.1fpst' % pst_factor
 # Save plot
 if save:
