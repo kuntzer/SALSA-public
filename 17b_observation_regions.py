@@ -39,9 +39,9 @@ from matplotlib.ticker import MaxNLocator, MultipleLocator, FormatStrFormatter
 ###########################################################################
 ### PARAMETERS
 # Orbit id
-orbit_id = 301
-apogee=700
-perigee=700
+orbit_id = '800_25_AKTAR'
+apogee=800
+perigee=800
 
 # File name for the list of orbit file
 orbits_file = 'orbits.dat'
@@ -50,13 +50,13 @@ orbits_file = 'orbits.dat'
 transit_duration = 6
 
 # Maximum interruption time tolerated [min]
-max_interruptions = 97
+max_interruptions = 99
 
 # Maximum visible magnitude
 mag_max = 12.
 
 # Take SAA into account?
-SAA = False
+SAA = True
 
 # Print much information ?
 verbose = False
@@ -76,7 +76,7 @@ early_stop = False
 nb_obs_days = range(10,17,1)#[13]#range(10,110,10)#
 
 # Minimal minutes to be observed per orbit (if consecutive == False)
-min_t_obs_per_orbit = 78
+min_t_obs_per_orbit = 80
 
 # This is a way to vary the results by multiplying the whole pst by a number.
 # This is very easy as if the pst is multiplied by a constant, it can be taken out of the
@@ -101,6 +101,29 @@ if not consecutive: note += '_cumul_'
 skycoverage_fname = 'skycoverage_region_%dmin_V%3.1f%s.txt' % (min_t_obs_per_orbit,mag_max,note)
 
 ### INITIALISATION
+## Prepare grid
+n_alpha = param.resx
+n_delta = param.resy
+
+ra_i = -np.pi
+ra_f = np.pi
+
+dec_i = -np.pi/2.
+dec_f = np.pi/2.
+
+ra_step = (ra_f-ra_i)/n_alpha
+dec_step = (dec_f-dec_i)/n_delta
+
+iterable = (ra_i + ra_step/2+ i*ra_step for i in range(n_alpha))
+ras = np.fromiter(iterable, np.float)
+
+iterable = (dec_i + dec_step/2+ i*dec_step for i in range(n_delta))
+decs = np.fromiter(iterable, np.float)
+
+ra_grid, dec_grid = np.meshgrid(ras, decs)
+
+data_grid = np.zeros(np.shape(ra_grid))*np.nan
+
 # Formatted folders definitions
 folder_flux, folder_figures, folder_misc = init_folders(orbit_id)
 output=open(os.path.join(folder_misc,skycoverage_fname),"a") 
@@ -117,10 +140,14 @@ for nb_obs_day in nb_obs_days:
 	period = altitude2period(apogee, perigee)
 	###########################################################################
 	### INITIALISATION
+	data_grid*=np.nan
 
 	output=open(os.path.join(folder_misc,skycoverage_fname),"a") 
 
-	print 'ORBIT ID:\t\t%d\nPST factor:\t\t%d\nMin Days of Coverage:\t%d\nmin_t_obs_per_orbit\t%d\nMAGNITIUDE:\t\t%02.1f' % (orbit_id,pst_factor,nb_obs_day,min_t_obs_per_orbit, mag_max)
+	print 
+	print 'ORBIT ID:\t\t%s\nPST factor:\t\t%d\nMin Days of Coverage:\t%d\nmin_t_obs_per_orbit\t%d\nMAGNITIUDE:\t\t%02.1f' % (orbit_id,pst_factor,nb_obs_day,min_t_obs_per_orbit, mag_max)
+
+	print "Loadind from %s" % input_fname
 
 	# loading data
 	sys.stdout.write("Loading worthy targets...\t")
@@ -132,15 +159,38 @@ for nb_obs_day in nb_obs_days:
 
 	count_T = 0
 	count_all=0
+	coords=[]
+#	cc=[]
 	for tgt, obs in zip(worthy_targets, obs_tot):
 		if obs == 0.: continue
 		count_all+=1
 		if observation_region.is_inside(tgt.Coordinates()):
 			count_T+=1
-	print
+
+		id_ra, id_dec = find_nearest(ras+np.pi, tgt.Coordinates()[0]), find_nearest(decs, tgt.Coordinates()[1])
+		data_grid[id_dec,id_ra]=obs
+#		coords.append(np.asarray(tgt.Coordinates()))
+
+
 	print observation_region
+	print '%d cells on %d tot' % (count_T,count_all)
 	print 'Percentage of observation in region: %2.1f' % (float(count_T)/float((count_all))*100.), '%'
 	
 	print >> output, nb_obs_day,'\t',float(count_T)/float((count_all))*100.,'\t\%'
 
 	output.close()
+
+	import pylab as plt	
+	plt.figure()
+
+	plt.contourf(np.degrees(ra_grid), np.degrees(dec_grid),data_grid)
+	plt.grid()
+	plt.xlim([-180,180])
+	plt.ylim([-90,90])
+	plt.title(input_fname)
+
+#	coords=np.asarray(coords)
+#	plt.scatter(coords[:,0],coords[:,1])
+
+plt.show()
+

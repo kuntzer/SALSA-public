@@ -39,8 +39,8 @@ from matplotlib.ticker import MaxNLocator, MultipleLocator, FormatStrFormatter
 from mpl_toolkits.basemap import Basemap
 ###########################################################################
 ### PARAMETERS
-orbit_id_ref=301
-orbit_id_other=301
+orbit_id_ref='700_25_AKTAR'
+orbit_id_other='700_25_AKTAR'
 
 # Give fname without the extension !
 #sky_coverage_map_fname_ref = '301-sky_map-78-mag12-days10-to-40-accumulated' 
@@ -49,8 +49,8 @@ orbit_id_other=301
 #sky_coverage_map_fname_ref = '301-sky_map-50-mag9-days10-to-90-accumulated'
 #sky_coverage_map_fname_other = '1000-sky_map-50-mag9-days10-to-90-accumulated'
 
-sky_coverage_map_fname_ref = '301-sky_map-78-mag12-days10-to-16_noSAA-obs_time'
-sky_coverage_map_fname_other = '301-sky_map-78-mag12-days10-to-16_SAA-obs_time'
+sky_coverage_map_fname_ref = '700_25_AKTAR-sky_map-78-mag12-days10-to-16_noSAA_0.0pst-obs_time'
+sky_coverage_map_fname_other = '700_25_AKTAR-sky_map-78-mag12-days10-to-16_SAA_0.0pst-obs_time'
 
 # Nice plots?
 fancy=True
@@ -95,7 +95,7 @@ plt.grid()
 
 CS = plt.contour( ra_grid,dec_grid,delta,colors='k')
 
-plt.clabel(CS, inline=1,fmt='%d',colors='red', fontsize=12)
+plt.clabel(CS, inline=1,fmt='%d',colors='k', fontsize=12)
 
 CS = plt.contourf( ra_grid ,dec_grid,delta,200,cmap=plt.cm.Paired)
 

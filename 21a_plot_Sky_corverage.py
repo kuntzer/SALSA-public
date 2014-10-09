@@ -34,13 +34,14 @@ import parameters as param
 import resources.constants as const
 import resources.figures as figures
 from resources.targets import *
+from resources.coordinates import ecliptic2equatorial
 
 from matplotlib.ticker import MaxNLocator, MultipleLocator, FormatStrFormatter
 from mpl_toolkits.basemap import Basemap
 ###########################################################################
 ### PARAMETERS
 # orbit_id
-orbit_id = 301
+orbit_id = '700_35_AKTAR'
 apogee = 700
 perigee = 700
 
@@ -54,16 +55,12 @@ minute_end = 1440*365/12
 orbits_file = 'orbits.dat'
 
 # Maximum visible magnitude
-mag_max = 12.
+mag_max = 9.
 
 # Min nb_obs_day
 min_nb_obs_day = 10#10
-max_nb_obs_day = 16#90
-step_nb_obs_day = 1#10
-
-# Plot a few stars as well ?
-stars=False
-targets_exo=False
+max_nb_obs_day = 90#16#90
+step_nb_obs_day = 10#10#1#10
 
 # Take SAA into account?
 SAA = True
@@ -71,14 +68,6 @@ SAA = True
 # Print much information ?
 verbose = False
 
-# Nice plots?
-fancy=True
-
-# Save plots?
-save = True
-
-# Show figures ?
-show = True
 
 # Factor in the SL post treatment correction ?
 SL_post_treat = True
@@ -94,8 +83,19 @@ pst_factor = 1.
 consecutive = False
 
 # Minimal minutes to be observed per orbit (if consecutive = False)
-min_t_obs_per_orbit = 78
+min_t_obs_per_orbit = 49
 
+# Nice plots?
+fancy=True
+
+# Save plots?
+save = True
+
+# Show figures ?
+show = True
+
+# Show ecliptic ?
+show_ecliptic=True
 
 # File name for the input file (in a compressed binary Python format)
 if SAA: note = '_SAA'
@@ -148,15 +148,6 @@ data_grid = np.zeros(np.shape(ra_grid))
 data_grid_days = np.zeros(np.shape(ra_grid))
 
 
-
-if stars:
-	ra_stars=[101.2833, 95.9875, 213.9167, 219.9, 279.2333, 78.6333, 114.8250, 88.7917]
-	dec_stars=[-16.7161, -52.6956, 19.1822, -60.8339, 38.7836, -8.2014, 5.2250, 7.4069]
-	y_offset=[0.5e6,0.5e6,-0.8e6,0.5e6,0.5e6,0.5e6,-0.8e6,0.5e6]
-	labels = ['Sirius','Canopus','Arcturus',r'$\alpha\mathrm{Centauri}$','Vega','Rigel','Procyon','Betelgeuse']
-
-if targets_exo: ra_tar, dec_tar, magn = np.loadtxt('resources/defined-exo.csv', delimiter=';', unpack=True)
-
 for nb_obs_day in np.arange(max_nb_obs_day, min_nb_obs_day-step_nb_obs_day, -1.*step_nb_obs_day):
 	# File name for the input file (in a compressed binary Python format)
 	input_fname = 'ephemerids_%ddays_%dmin_V%3.1f%s.npz' % (nb_obs_day,min_t_obs_per_orbit,mag_max,note)
@@ -200,7 +191,6 @@ for nb_obs_day in np.arange(max_nb_obs_day, min_nb_obs_day-step_nb_obs_day, -1.*
 			id_ra = np.where(np.abs(ras-target.Coordinates()[0]) < 0.05)[0]
 		else:
 			id_ra = np.where(np.abs(ras-(target.Coordinates()[0]-2.*np.pi)) < 0.05)[0]
-
 		id_dec= np.where(np.abs(decs-target.Coordinates()[1]) < 0.05)[0]
 	# Transform density in prob of transit:
 		if data_grid[id_dec, id_ra] == 0 and obs_tot[index_target]>0.:
@@ -262,6 +252,20 @@ cbar.set_label(r'$\mathrm{Days}$')
 
 plt.xlabel('RA [deg]')
 plt.ylabel('Dec [deg]')
+
+if show_ecliptic:
+	a=np.linspace(-np.pi, np.pi)
+	b=np.zeros_like(a)
+	res=np.rad2deg(ecliptic2equatorial(a,b))
+	plt.plot(res[:,0],res[:,1],lw=2,color="red")
+
+	# Sun in june
+	plt.plot([-90.],[23.433],'o',color="yellow", markersize=8, zorder=5)
+	plt.text(-85.,23.433, r"$\odot_\mathrm{June}$", color='k', size='small', weight='black')
+	# Sun in december
+	plt.plot([90.],[-23.433],'o',color="yellow", markersize=8, zorder=5)
+	plt.text(95.,-23.433, r"$\odot_\mathrm{Dec}$", color='k', size='small', weight='black')
+
 ###########################################################################
 fig2 = plt.figure()
 ax=plt.subplot(111)
@@ -283,19 +287,30 @@ cbar.set_label(r'$\mathrm{Days}$')
 
 plt.xlabel('RA [deg]')
 plt.ylabel('Dec [deg]')
+
+if show_ecliptic:
+	plt.plot(res[:,0],res[:,1],lw=2,color="red")
+
+	# Sun in june
+	plt.plot([-90.],[23.433],'o',color="yellow", markersize=8, zorder=5)
+	plt.text(-85.,23.433, r"$\odot_\mathrm{June}$", color='white', size='small', weight='black')
+	# Sun in december
+	plt.plot([90.],[-23.433],'o',color="yellow", markersize=8, zorder=5)
+	plt.text(95.,-23.433, r"$\odot_\mathrm{Dec}$", color='white', size='small', weight='black')
+
 ###########################################################################
 if not SAA: note = '_noSAA'
 else: note = '_SAA'
 if not pst_factor == 1.: note += '_%1.1fpst' % pst_factor
 # Save plot
 if save:
-	fname = '%d-sky_map-%d-mag%d-days%d-to-%d%s-accumulated' % (orbit_id,min_t_obs_per_orbit,mag_max,min_nb_obs_day,max_nb_obs_day,note)
+	fname = '%s-sky_map-%d-mag%d-days%d-to-%d%s-accumulated' % (orbit_id,min_t_obs_per_orbit,mag_max,min_nb_obs_day,max_nb_obs_day,note)
 	figures.savefig(folder_figures+fname, fig, fancy)
 	np.savez_compressed(folder_misc+fname, ra_grid=ra_grid, dec_grid=dec_grid, data_grid=data_grid, ticks=int((max_nb_obs_day-min_nb_obs_day)/step_nb_obs_day))
 	print 'saved as %s' % fname
 
 
-	fname = '%d-sky_map-%d-mag%d-days%d-to-%d%s-obs_time' % (orbit_id,min_t_obs_per_orbit,mag_max,min_nb_obs_day,max_nb_obs_day,note)
+	fname = '%s-sky_map-%d-mag%d-days%d-to-%d%s-period_obs' % (orbit_id,min_t_obs_per_orbit,mag_max,min_nb_obs_day,max_nb_obs_day,note)
 	figures.savefig(folder_figures+fname, fig2, fancy)
 	np.savez_compressed(folder_misc+fname, ra_grid=ra_grid, dec_grid=dec_grid, data_grid=data_grid_days, ticks=int((max_nb_obs_day-min_nb_obs_day)/step_nb_obs_day))
 	print 'saved as %s' % fname

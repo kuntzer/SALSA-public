@@ -42,9 +42,9 @@ from matplotlib.ticker import MaxNLocator, MultipleLocator, FormatStrFormatter
 ###########################################################################
 ### PARAMETERS
 # orbit_iditude of the orbit in km
-orbit_id = 301
-apogee=700
-perigee=700
+orbit_id = '800_35_AKTAR'
+apogee=800
+perigee=800
 
 # First minute in data set !
 minute_ini = 0
@@ -62,13 +62,13 @@ max_interruptions = 0 # see below period =
 t_acquisition = 3
 
 # Take into account the stray light?
-straylight = False
+straylight = True
 
 # Maximum visible magnitude
-mag_max = 12. #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!<< params
+mag_max = 9. #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!<< params
 
 # Include SAA ?
-SAA = False
+SAA = True
 
 # This is a way to vary the results by multiplying the whole pst by a number.
 # This is very easy as if the pst is multiplied by a constant, it can be taken out of the
@@ -94,7 +94,7 @@ file_flux = 'flux_'
 # changes the threshold by addition the acquisition time:
 threshold_obs_time = period - max_interruptions + t_acquisition
 
-print 'ORBIT ID:\t\t%d\nmax_interruptions:\t%d+%d min\nMAGNITIUDE:\t\t%02.1f\nPST factor\t\t%g' % (orbit_id,max_interruptions,t_acquisition, mag_max,pst_factor)
+print 'ORBIT ID:\t\t%s\nmax_interruptions:\t%d+%d min\nMAGNITIUDE:\t\t%02.1f\nPST factor\t\t%g' % (orbit_id,max_interruptions,t_acquisition, mag_max,pst_factor)
 
 # Formatted folders definitions
 folder_flux, folder_figures, folder_misc = init_folders(orbit_id)
@@ -108,15 +108,17 @@ sys.stdout.flush()
 
 orbits = np.loadtxt(folder_misc+orbits_file,dtype='i4')
 
-list_minutes = -1. * np.ones( ( np.shape(orbits)[0] + 2 ) * period )
+#list_minutes = -1. * np.ones( ( np.shape(orbits)[0] + 2 ) * period )
+list_minutes=[]
 
 id_min = 0
-times = np.loadtxt('resources/minute_table_%d.dat' % orbit_id, delimiter=',',dtype='Int32')
+times = np.loadtxt('resources/minute_table_%s.dat' % orbit_id, delimiter=',',dtype='Int32')
 for ii, orbit_current in enumerate(orbits[:,0]):
 	t_ini, t_end, a_ini, a_end = fast_orbit2times(times,orbit_current,orbit_id)
 	for minute in range(a_ini, a_end+1):
-		list_minutes[id_min] = int(minute)
+		list_minutes.append(int(minute))
 		id_min += 1
+list_minutes=np.asarray(list_minutes)
 
 list_minutes = list_minutes[list_minutes > -1]
 
@@ -160,7 +162,7 @@ numberofminutes = minute_end+1 - minute_ini
 maximum_sl_flux = mag2flux(mag_max)
 
 if SAA:
-	SAA_data = np.loadtxt('resources/SAA_table_%d.dat' % orbit_id, delimiter=',')
+	SAA_data = np.loadtxt('resources/SAA_table_%s.dat' % orbit_id, delimiter=',')
 	SAA_data = SAA_data[SAA_data[:,0]>= minute_ini]
 	SAA_data = SAA_data[SAA_data[:,0]<= minute_end]
 
@@ -202,7 +204,7 @@ workspace = np.zeros(np.shape(ra_grid))
 
 # Load the reference times
 orbits = np.loadtxt(folder_misc+orbits_file,dtype='i4')
-minutes_altitude = np.loadtxt('resources/minute_table_%d.dat' % orbit_id, delimiter=',',dtype='Int32')
+minutes_altitude = np.loadtxt('resources/minute_table_%s.dat' % orbit_id, delimiter=',',dtype='Int32')
 
 # Set variables for printing the status
 numberofminutes = minute_end+1 - minute_ini
@@ -220,7 +222,7 @@ if not fo == first_computed:
 	junk, junk, minute_ini, junk = fast_orbit2times(minutes_altitude, first_computed, orbit_id)
 #	print '1st referenced orbit: %d\twanted orbit: %d' % (first_computed, fo)
 try:
-	for minute in range(minute_ini,minute_end+1+int(period)):
+	for minute in range(minute_ini,minute_end+1):#+int(period)):
 		minute = int(minute)
 	
 		if SAA and fast_SAA(SAA_data, minute): SAA_at_minute = True
@@ -235,7 +237,7 @@ try:
 			sys.stdout.write(message)
 			sys.stdout.flush()
 
-		junk, len_orbit, atc_ini, junk = fast_orbit2times(minutes_altitude, orbit_current, orbit_id)
+		_, len_orbit, atc_ini, atc_end = fast_orbit2times(minutes_altitude, orbit_current, orbit_id)
 		try:
 			ra, dec, S_sl = load_flux_file(minute, file_flux, folder=folder_flux)
 			S_sl *= pst_factor
@@ -255,7 +257,11 @@ try:
 				if SAA_at_minute:
 					obj.current_visibility = 0
 				else:
-					obj.current_visibility = obj.visible_save[minute_to_load]
+					try:
+						obj.current_visibility = obj.visible_save[minute_to_load]
+					except IndexError:
+						print minute_to_load, minute_end, atc_end, minute
+						exit()
 
 
 			load = False
@@ -270,7 +276,7 @@ try:
 				b = np.where(np.abs(dec_-dec)<dec_step/2)[0]	
 				INT = np.intersect1d(a,b)
 
-				if np.shape(INT)[0] == 0 or (straylight and S_sl[INT]*corr_fact > obj.maximum_flux()): 
+				if np.shape(INT)[0] == 0 or (straylight and S_sl[INT]*corr_fact*param.SL_QE > obj.maximum_flux()): 
 					obj.visible_save[minute_to_load] = 0
 					obj.current_visibility = 0
 					continue
