@@ -48,16 +48,16 @@ perigee=800
 orbits_file = 'orbits.dat'
 
 # Minimum observable time for plots [h] (Only used for consecutive observation time)
-transit_duration = 13
+transit_duration = 10
 
 # Maximum interruption time tolerated [min]
 max_interruptions = 99
 
 # Maximum visible magnitude
-mag_max = 9.
+mag_max = 12.
 
 # Take SAA into account?
-SAA = True
+SAA = False
 
 # Print much information ?
 verbose = False
@@ -74,15 +74,15 @@ SL_post_treat = True
 early_stop = False
 
 # Minimal # of days of obs (if consecutive == False), must be a list
-nb_obs_days = range(10,110,10)#[5,10,13,20,30,40]#[0,10,20,30,40]#range(10,17,1)#range(5,45,5)#
+nb_obs_days = range(0,10,5)#[13]#range(20,45,5)#[13]#range(5,45,5)#[0,10,20,30,40]#range(10,17,1)##range(10,110,10)#
 
 # Minimal minutes to be observed per orbit (if consecutive == False)
-mins_t_obs_per_orbit = [50]#[78]#range(68,78,1)
+mins_t_obs_per_orbit = [80]#[78]#range(68,78,1)
 
 # This is a way to vary the results by multiplying the whole pst by a number.
 # This is very easy as if the pst is multiplied by a constant, it can be taken out of the
 # integral and only multplying the flux is equivalent to re-running all the simulations
-pst_factor=1.
+pst_factor=0.
 
 # File name for the input file (in a compressed binary Python format)
 if SAA: note = '_SAA'
@@ -111,7 +111,8 @@ for min_t_obs_per_orbit in mins_t_obs_per_orbit:
 		### INITIALISATION
 		# Formatted folders definitions
 		folder_flux, folder_figures, folder_misc = init_folders(orbit_id)
-	
+
+		sky_coverage=0.
 	
 		output=open(os.path.join(folder_misc,skycoverage_fname),"a") 
 	
@@ -123,6 +124,8 @@ for min_t_obs_per_orbit in mins_t_obs_per_orbit:
 	
 		worthy_targets = np.load(folder_misc+input_fname)
 		worthy_targets = worthy_targets['worthy_targets']
+
+		check=np.zeros_like(worthy_targets)
 	
 		max_len = 0
 		for k in range(0, len(worthy_targets)):
@@ -247,154 +250,34 @@ for min_t_obs_per_orbit in mins_t_obs_per_orbit:
 				k = 0
 				t_obs_per_orbit = np.zeros(param.last_orbits[orbit_id]+1)
 	
-			# iterate on the visibility (i.e. time when the target becomes visible)	
-				for k in range(0, len(visi)):
-					# shorthand notations
-					vis = visi[k]
-					ini = invi[k]
-	
-	
-					orbit = fast_minute2orbit(times, vis,orbit_id)
-					if orbit > param.last_orbits[orbit_id]: continue
-	
-					#print orbit, fast_minute2orbit(times, ini,orbit_id)
-	
-					a_end = a_end_orbits[orbit-1]
-					if a_end >= ini:
-						t_obs_per_orbit[orbit-1] += ini-vis
-					else:	
-						t_obs_per_orbit[orbit-1] += a_end - vis
-	
-						orbit_currently_in=orbit
-						while True:
-							if fast_minute2orbit(times, ini,orbit_id)>orbit_currently_in:
-								#print fast_minute2orbit(times, ini,orbit_id),orbit_currently_in
-								#else: 
-								t_obs_per_orbit[orbit_currently_in]+=period
-							else:
-								#print orbit_currently_in, fast_minute2orbit(times, ini,orbit_id)
-								try: t_obs_per_orbit[orbit_currently_in]+=ini-a_end_orbits[orbit_currently_in-1]	
-								except:
-									pass
-								break
-							orbit_currently_in+=1
-							if orbit_currently_in>=param.last_orbits[orbit_id]-1:
-								t_obs_per_orbit[orbit_currently_in-2]+=ini-a_end_orbits[orbit_currently_in-2]	
-								
-							
-						'''
-						if orbit<param.last_orbits[orbit_id]:
-							if ini>a_end_orbits[orbit]:
-								t_obs_per_orbit[orbit] += a_end_orbits[orbit]-a_end
-								print a_end_orbits[orbit], ini, , 
-								t_obs_per_orbit[orbit+1] += ini-a_end_orbits[orbit]
-							else:
-								t_obs_per_orbit[orbit] += ini-a_end
-						else: t_obs_per_orbit[orbit-1] += ini-a_end'''
+				observations = invi-visi
+				observations=observations[observations>=min_t_obs_per_orbit]
+				if np.size(observations)>0:
+					check[ii] += observations.sum()
+				else: continue
+
+			sky_coverage=0.
+			#print np.size(check[check>nb_obs_day*24.*60.])
+			for ii in range(len(worthy_targets)):
+				if check[ii]<nb_obs_day*24.*60.: continue
+				rat, dect = worthy_targets[ii].Coordinates()
+				sky_coverage+=0.5/param.resx/param.resy*np.pi*np.cos(dect)
 		
-				sufficent_obs = np.where(t_obs_per_orbit>=min_t_obs_per_orbit)[0]
-				t_obs_per_orbit[t_obs_per_orbit<min_t_obs_per_orbit] = 0
-	
-				if np.size(sufficent_obs) > 0:
-					t_obs_per_orbit=t_obs_per_orbit[sufficent_obs]
-					obs_tot[ii] = np.sum(t_obs_per_orbit)
-					obs_orbit_tot[ii] = np.size(sufficent_obs)
-	
-					sufficent_days = fast_orbit2day(times, sufficent_obs, orbit_id)
-	#				sufficent_days=np.size(np.unique(sufficent_days))
-	
-	
-					try:
-						yy = np.bincount(np.int64(sufficent_days))
-						keys = np.nonzero(yy)[0]
-						yy = yy[keys]
-					except ValueError:
-						yy = np.int64(sufficent_days)
-		
-				
-					sufficent_days = np.float64(yy)/nb_orbit_per_day
-					sufficent_days = sufficent_days.sum()
-	
-					if verbose: print '\nThere are %g independant days of observations of %g %% of obs time' % (sufficent_days, 100.*obs_tot[ii]/24./60. / (nb_obs_day*(min_t_obs_per_orbit/period))) 
-	
-					#print obs_orbit_tot[ii], nb_obs_day*(min_t_obs_per_orbit/period)
-	
-					if obs_tot[ii]/24./60. >= nb_obs_day*(min_t_obs_per_orbit/period) and sufficent_days >= nb_obs_day :
-						count += 1
-						#print count
-						aini = fast_orbit2a_ini_vect(times, sufficent_obs+1, orbit_id)
-						start_obs[ii,:np.size(aini)] = aini
-						stop_obs[ii,:np.size(aini)] = aini + t_obs_per_orbit
-						interruptions_obs[ii,:] = np.nan
-						rat, dect = worthy_targets[ii].Coordinates()
-						if verbose: print rat*180./np.pi, dect*180./np.pi, '>>', obs_tot[ii]/24./60., 'days\t', sufficent_days, nb_obs_day
-					else:
-						obs_tot[ii] = 0.
-						obs_orbit_tot[ii] = 0.
-	
-	#				if np.any(obs_orbit_tot>0.):
-	#					print obs_orbit_tot/nb_orbit_per_day
-						
 			message = '\rComputations done.' 
 			sys.stdout.write(message)
 			sys.stdout.flush()
 	
 			print '\nSky coverage for %d days' % nb_obs_day
-			"""for min_percentage in range(0, 110, 10):
+
+			rslts = sky_coverage
 	
-				condition = nb_obs_day*24.*60.*min_percentage/period
-				indexes = np.where(obs_tot>condition)
-				rslts = np.size(obs_tot[indexes])"""
-	
-			#condition = nb_obs_day*nb_orbit_per_day
-			#indexes = np.where(obs_orbit_tot>=condition)
-			rslts = np.shape(obs_orbit_tot[obs_orbit_tot>0])[0]
-			#rslts = np.size(obs_orbit_tot[indexes])
-			#print rslts
-	
-			#indexes = np.where(obs_orbit_tot<condition)
-			#obs_tot[indexes] = 0.
-	
-				#print min_percentage, '%\t', rslts, ' targets\t', round(float(rslts)/param.total_nb_targets*100.,3), '%'
-	
-			print nb_obs_day,'\t',rslts, ' targets\t***', round(float(rslts)/param.total_nb_targets*100.,3), ' % ***'
-			print >> output, nb_obs_day,'\t',rslts, ' targets\t', round(float(rslts)/param.total_nb_targets*100.,3), ' %'
+			print nb_obs_day,'\t***', round(rslts*100.,3), ' % ***'
+			print >> output, nb_obs_day,'\t', round(rslts*100.,3)
 	
 			if early_stop: continue
 	
 			if verbose: print obs_tot/24./60.
-			np.savez_compressed(folder_misc+output_fname, worthy_targets=worthy_targets, obs_tot=obs_tot)
+			np.savez_compressed(folder_misc+output_fname, worthy_targets=worthy_targets, obs_tot=check)
 			print 'Filed saved as %s' % output_fname
 			output.close()
-			
-	"""		exit()
-	# Checks which targets are actually visible
-		truth_table=[False]*len(worthy_targets)
-		iii=0
-	
-		for ii in range(0, len(worthy_targets)):
-			if np.abs(stop_obs[ii,0]) > 1e-5 :
-				iii+=1
-				truth_table[ii]=True
-		truth_table=np.asarray(truth_table)
-		
-		interruptions_obs=interruptions_obs[truth_table,:]
-		start_obs=start_obs[truth_table,:]
-		stop_obs=stop_obs[truth_table,:]
-		worthy_targets=worthy_targets[truth_table]
-		
-	###########################################################################
-	###########################################################################
-	###########################################################################
-	
-	
-	
-		#print np.shape(interruptions_obs), np.shape(start_obs), np.shape(stop_obs), np.shape(worthy_targets)
-		print '\r%d targets can be observed' % (len(worthy_targets))
-	
-	
-	
-		# Saves stuff
-		np.savez_compressed(folder_misc+output_fname, worthy_targets=worthy_targets, start_obs=start_obs, stop_obs=stop_obs, interruptions_obs=interruptions_obs)
-		print 'Filed saved as %s' % output_fname
-	"""
+

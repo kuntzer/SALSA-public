@@ -41,9 +41,9 @@ from mpl_toolkits.basemap import Basemap
 ###########################################################################
 ### PARAMETERS
 # orbit_id
-orbit_id = '700_35_AKTAR'
-apogee = 700
-perigee = 700
+orbit_id='800_35_AKTAR'
+apogee=800
+perigee=800
 
 # First minute in data set !
 minute_ini = 0
@@ -55,19 +55,26 @@ minute_end = 1440*365/12
 orbits_file = 'orbits.dat'
 
 # Maximum visible magnitude
-mag_max = 9.
+mag_max = 12.
 
 # Min nb_obs_day
-min_nb_obs_day = 10#10
-max_nb_obs_day = 90#16#90
-step_nb_obs_day = 10#10#1#10
+nb_obs_day = 5
+
+# min of scale
+min_val=10
+# max of scale
+max_val=60
+#
+step_scale=10
 
 # Take SAA into account?
 SAA = True
 
+# Minimal minutes to be observed per orbit (if consecutive = False)
+min_t_obs_per_orbit = 80
+
 # Print much information ?
 verbose = False
-
 
 # Factor in the SL post treatment correction ?
 SL_post_treat = True
@@ -75,15 +82,12 @@ SL_post_treat = True
 # This is a way to vary the results by multiplying the whole pst by a number.
 # This is very easy as if the pst is multiplied by a constant, it can be taken out of the
 # integral and only multplying the flux is equivalent to re-running all the simulations
-pst_factor = 1.
+pst_factor = 0.
 
 # If set to True, then it will be observations of at least (period - max_interruptions)
 # If set to False, then it is minimum (period - max_interruptions) minutes per orbit, 
 # not necesseraly consecutive.
 consecutive = False
-
-# Minimal minutes to be observed per orbit (if consecutive = False)
-min_t_obs_per_orbit = 49
 
 # Nice plots?
 fancy=True
@@ -148,57 +152,46 @@ data_grid = np.zeros(np.shape(ra_grid))
 data_grid_days = np.zeros(np.shape(ra_grid))
 
 
-for nb_obs_day in np.arange(max_nb_obs_day, min_nb_obs_day-step_nb_obs_day, -1.*step_nb_obs_day):
-	# File name for the input file (in a compressed binary Python format)
-	input_fname = 'ephemerids_%ddays_%dmin_V%3.1f%s.npz' % (nb_obs_day,min_t_obs_per_orbit,mag_max,note)
+# File name for the input file (in a compressed binary Python format)
+input_fname = 'ephemerids_%ddays_%dmin_V%3.1f%s.npz' % (nb_obs_day,min_t_obs_per_orbit,mag_max,note)
 
-	# loading data
-	print 'loading %s' % input_fname
-	sys.stdout.write("Loading worthy targets...\t")
-	sys.stdout.flush()
+# loading data
+print 'loading %s' % input_fname
+sys.stdout.write("Loading worthy targets...\t")
+sys.stdout.flush()
 
-	data = np.load(folder_misc+input_fname)
-	worthy_targets = data['worthy_targets']
-	obs_tot=data['obs_tot']
-#	start_obs=data['start_obs']
-#	stop_obs=data['stop_obs']
-#	interruptions_obs=data['interruptions_obs']
+data = np.load(folder_misc+input_fname)
+worthy_targets = data['worthy_targets']
+obs_tot=data['obs_tot']
 
-	print 'Done, %d targets loaded for nb_obs_day %3.1f' % (len(worthy_targets), nb_obs_day)
+print 'Done, %d targets loaded for nb_obs_day %3.1f' % (len(worthy_targets), nb_obs_day)
 
-	###########################################################################
-	# cycling through the targets:
-	obs_time = np.zeros(len(worthy_targets))
-	for index_target, target in enumerate(worthy_targets):
-#		tar_start = start_obs[index_target,:]
-#		tar_stop = stop_obs[index_target,:]
+###########################################################################
+# cycling through the targets:
+obs_time = np.zeros(len(worthy_targets))
+for index_target, target in enumerate(worthy_targets):
+#	tar_start = start_obs[index_target,:]
+#	tar_stop = stop_obs[index_target,:]
 
-#	print target.Coordinates()[0]*180./np.pi, target.Coordinates()[1]*180./np.pi
-		if verbose: print index_target, target.Coordinates()[0]*180./np.pi, target.Coordinates()[1]*180./np.pi
+#print target.Coordinates()[0]*180./np.pi, target.Coordinates()[1]*180./np.pi
+	if verbose: print index_target, target.Coordinates()[0]*180./np.pi, target.Coordinates()[1]*180./np.pi
 
-		if obs_tot[index_target]>0.:
-			obs_time[index_target]=obs_tot[index_target]/60./24.
+	if obs_tot[index_target]>0.:
+		obs_time[index_target]=obs_tot[index_target]/60./24.
 
-		'''
-		for i, f in zip(tar_start, tar_stop):
-			if i >= 0 and f > 0:
-				if verbose: print i, f, f-i
-				obs_time[index_target]+=f-i
-		if verbose: print '-'*30
-		'''
-		# Associate the density to a grid point
-		if target.Coordinates()[0] < np.pi:
-			id_ra = np.where(np.abs(ras-target.Coordinates()[0]) < 0.05)[0]
-		else:
-			id_ra = np.where(np.abs(ras-(target.Coordinates()[0]-2.*np.pi)) < 0.05)[0]
-		id_dec= np.where(np.abs(decs-target.Coordinates()[1]) < 0.05)[0]
+	# Associate the density to a grid point
+	if target.Coordinates()[0] < np.pi:
+		id_ra = np.where(np.abs(ras-target.Coordinates()[0]) < 0.05)[0]
+	else:
+		id_ra = np.where(np.abs(ras-(target.Coordinates()[0]-2.*np.pi)) < 0.05)[0]
+	id_dec= np.where(np.abs(decs-target.Coordinates()[1]) < 0.05)[0]
 	# Transform density in prob of transit:
-		if data_grid[id_dec, id_ra] == 0 and obs_tot[index_target]>0.:
-			data_grid_days[id_dec, id_ra] = nb_obs_day
-			data_grid[id_dec, id_ra] = obs_tot[index_target]/60./24.
-			if verbose: print target.Coordinates()[0]*180./np.pi,'\t',target.Coordinates()[1]*180./np.pi,'\t', obs_tot[index_target]/24./60.
+	if data_grid[id_dec, id_ra] == 0 and obs_tot[index_target]>0.:
+		data_grid_days[id_dec, id_ra] = nb_obs_day
+		data_grid[id_dec, id_ra] = obs_tot[index_target]/60./24.
+		if verbose: print target.Coordinates()[0]*180./np.pi,'\t',target.Coordinates()[1]*180./np.pi,'\t', obs_tot[index_target]/24./60.
 
-	if verbose: print 'obs start | obs end | hours of obs'
+if verbose: print 'obs start | obs end | hours of obs'
 
 print np.amin(data_grid), np.amax(data_grid)
 
@@ -231,22 +224,33 @@ fig = plt.figure()
 ax=plt.subplot(111)
 ax.set_aspect(2.)
 
+min_nb_obs_day = np.nanmin(data_grid)
+max_nb_obs_day = np.nanmax(data_grid)
+
 plt.grid()
 
 ra_grid *= const.RAD
 dec_grid *= const.RAD
+data_grid[data_grid<min_nb_obs_day]=0
 
-CS = plt.contour( ra_grid,dec_grid,data_grid,int((max_nb_obs_day-min_nb_obs_day)/step_nb_obs_day),colors='k')
+v = np.arange(min_val,max_val+step_scale, step_scale)
+
+CS = plt.contour(ra_grid,dec_grid,data_grid,colors='k',levels=v)
 
 plt.clabel(CS, inline=1,fmt='%d',colors='red', fontsize=12)
 
-CS = plt.contourf( ra_grid ,dec_grid,data_grid,200,cmap=plt.cm.winter)
+CS = plt.contourf(ra_grid ,dec_grid,data_grid,levels=v,cmap=plt.cm.winter)
 
 plt.yticks(np.arange(-80, 100, 20.))
 
-v = np.linspace(min_nb_obs_day,max_nb_obs_day, (max_nb_obs_day-min_nb_obs_day)/step_nb_obs_day+1, endpoint=True)
- 
-cbar = plt.colorbar(CS)#, ticks=v)
+
+print v
+print np.nanmin(data_grid)
+print np.nanmax(data_grid)
+
+#v = np.arange(np.nanmin(data_grid),np.nanmax(data_grid), 10)
+
+cbar = plt.colorbar(CS, ticks=v)
 #cbar.set_ticklabels(v)
 cbar.set_label(r'$\mathrm{Days}$')
 
@@ -260,43 +264,12 @@ if show_ecliptic:
 	plt.plot(res[:,0],res[:,1],lw=2,color="red")
 
 	# Sun in june
-	plt.plot([-90.],[23.433],'o',color="yellow", markersize=8, zorder=5)
-	plt.text(-85.,23.433, r"$\odot_\mathrm{June}$", color='k', size='small', weight='black')
+	plt.plot([90.],[23.433],'o',color="yellow", markersize=8, zorder=5)
+	plt.text(-90.,80., r"$\mathrm{Summer\ sky}$", color='k', size='small', ha="center",weight='black')
 	# Sun in december
-	plt.plot([90.],[-23.433],'o',color="yellow", markersize=8, zorder=5)
-	plt.text(95.,-23.433, r"$\odot_\mathrm{Dec}$", color='k', size='small', weight='black')
+	plt.plot([-90.],[-23.433],'o',color="yellow", markersize=8, zorder=5)
+	plt.text(90.,-80., r"$\mathrm{Winter\ sky}$", color='k', size='small', ha="center",weight='black')
 
-###########################################################################
-fig2 = plt.figure()
-ax=plt.subplot(111)
-ax.set_aspect(2.)
-
-plt.grid()
-CS = plt.contour( ra_grid,dec_grid,data_grid_days,int((max_nb_obs_day-min_nb_obs_day)/step_nb_obs_day),colors='k')
-plt.clabel(CS, inline=1,fmt='%d',colors='red', fontsize=12)
-
-CS = plt.contourf( ra_grid ,dec_grid,data_grid_days,200,cmap=plt.cm.winter)
-
-plt.yticks(np.arange(-80, 100, 20.))
-
-v = np.linspace(min_nb_obs_day,max_nb_obs_day, (max_nb_obs_day-min_nb_obs_day)/step_nb_obs_day+1, endpoint=True)
- 
-cbar = plt.colorbar(CS, ticks=v)
-cbar.set_ticklabels(v)
-cbar.set_label(r'$\mathrm{Days}$')
-
-plt.xlabel('RA [deg]')
-plt.ylabel('Dec [deg]')
-
-if show_ecliptic:
-	plt.plot(res[:,0],res[:,1],lw=2,color="red")
-
-	# Sun in june
-	plt.plot([-90.],[23.433],'o',color="yellow", markersize=8, zorder=5)
-	plt.text(-85.,23.433, r"$\odot_\mathrm{June}$", color='white', size='small', weight='black')
-	# Sun in december
-	plt.plot([90.],[-23.433],'o',color="yellow", markersize=8, zorder=5)
-	plt.text(95.,-23.433, r"$\odot_\mathrm{Dec}$", color='white', size='small', weight='black')
 
 ###########################################################################
 if not SAA: note = '_noSAA'
@@ -304,15 +277,9 @@ else: note = '_SAA'
 if not pst_factor == 1.: note += '_%1.1fpst' % pst_factor
 # Save plot
 if save:
-	fname = '%s-sky_map-%d-mag%d-days%d-to-%d%s-accumulated' % (orbit_id,min_t_obs_per_orbit,mag_max,min_nb_obs_day,max_nb_obs_day,note)
+	fname = '%s-sky_map-%d-mag%d%s_accumulated' % (orbit_id,min_t_obs_per_orbit,mag_max,note)
 	figures.savefig(folder_figures+fname, fig, fancy)
-	np.savez_compressed(folder_misc+fname, ra_grid=ra_grid, dec_grid=dec_grid, data_grid=data_grid, ticks=int((max_nb_obs_day-min_nb_obs_day)/step_nb_obs_day))
-	print 'saved as %s' % fname
-
-
-	fname = '%s-sky_map-%d-mag%d-days%d-to-%d%s-period_obs' % (orbit_id,min_t_obs_per_orbit,mag_max,min_nb_obs_day,max_nb_obs_day,note)
-	figures.savefig(folder_figures+fname, fig2, fancy)
-	np.savez_compressed(folder_misc+fname, ra_grid=ra_grid, dec_grid=dec_grid, data_grid=data_grid_days, ticks=int((max_nb_obs_day-min_nb_obs_day)/step_nb_obs_day))
+	np.savez_compressed(folder_misc+fname, ra_grid=ra_grid, dec_grid=dec_grid, data_grid=data_grid, ticks=v)
 	print 'saved as %s' % fname
 
 
