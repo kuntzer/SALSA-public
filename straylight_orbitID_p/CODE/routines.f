@@ -284,6 +284,8 @@ c     ==========================================================================
 	double precision proj_surf
       integer i,j
 
+	double precision prod
+
 	Delta_alpha = 2.d0*pi/dble(n_alpha-1)
 	Delta_delta = pi/dble(n_delta-1)
 	surf = R_Earth**2.d0 * Delta_alpha * Delta_delta
@@ -312,10 +314,13 @@ c     ==========================================================================
 
                call R_3D(V, d)
 
+				call scalar_product(V, EARTH, prod) 
+
 c		   Get the surface area of the projected surface
 		   angle = SphericalDistance(RA_SAT, DEC_SAT,
      &		 alpha_grid, delta_grid)
-		   proj_surf = surf * dcos(angle)
+
+		   proj_surf = surf*dcos(angle)*abs(prod/(R_Earth*d)) 
 
                if(include_pst) then
                  energy = energy + 
