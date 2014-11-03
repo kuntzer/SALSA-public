@@ -33,7 +33,7 @@ c COMPUTATIONALLY RELEVANT PARAMETERS
 	parameter (n_delta = 501) ! Number of cells + 1 in latitutde to represent the Earth
       
 	integer n_targets_max
-	parameter (n_targets_max = 1000) ! Maximum number of targets in the sky to be processed
+	parameter (n_targets_max = 10000) ! Maximum number of targets in the sky to be processed
 
 	logical gradient! True: compute the gradient in day side. Otherwise only day/night
 	parameter(gradient = .true.)
