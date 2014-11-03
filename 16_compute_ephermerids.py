@@ -241,10 +241,6 @@ try:
 		try:
 			ra, dec, S_sl = load_flux_file(minute, file_flux, folder=folder_flux)
 			S_sl *= pst_factor
-			keep_sl = S_sl>1e-9
-			ra=ra[keep_sl]
-			dec=dec[keep_sl]
-			S_sl=S_sl[keep_sl]	
 			load = True
 			minute_to_load = minute-atc_ini#+shift
 		except IOError:
