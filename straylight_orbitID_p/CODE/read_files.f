@@ -77,12 +77,17 @@ c-----------------------------------------------------------------------
 
       implicit none
       include 'parameters'
-      double precision ALFA(1:n_targets_max), DELTA(1:n_targets_max)
+      double precision ALFA(n_targets_max), DELTA(n_targets_max)
       integer i, N_TARGETS
 
-      do i = 1, n_targets_max
-         ALFA(i) = 0.d0
-         DELTA(i) = 0.d0
+	if (N_TARGETS.gt.n_targets_max) then
+		print *, "ERROR: The RA,DEC table is not big enough"
+		stop
+	endif
+
+      do i = 1, N_TARGETS
+         ALFA(i) = -20.d0
+         DELTA(i) = -20.d0
       enddo
  
       open(unit = 20, file= '../INPUT/coord_targets.dat')
