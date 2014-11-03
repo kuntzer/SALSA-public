@@ -42,7 +42,7 @@ from matplotlib.ticker import MaxNLocator, MultipleLocator, FormatStrFormatter
 ###########################################################################
 ### PARAMETERS
 # orbit_iditude of the orbit in km
-orbit_id = '800_35_AKTAR'
+orbit_id = 'ID_STRING'
 apogee=800
 perigee=800
 
@@ -59,13 +59,13 @@ orbits_file = 'orbits.dat'
 max_interruptions = 0 # see below period = 
 
 # Time to acquire a target [min]
-t_acquisition = 3
+t_acquisition = 0
 
 # Take into account the stray light?
 straylight = True
 
 # Maximum visible magnitude
-mag_max = 9. #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!<< params
+mag_max = 12. #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!<< params
 
 # Include SAA ?
 SAA = True
@@ -241,6 +241,10 @@ try:
 		try:
 			ra, dec, S_sl = load_flux_file(minute, file_flux, folder=folder_flux)
 			S_sl *= pst_factor
+			keep_sl = S_sl>1e-9
+			ra=ra[keep_sl]
+			dec=dec[keep_sl]
+			S_sl=S_sl[keep_sl]	
 			load = True
 			minute_to_load = minute-atc_ini#+shift
 		except IOError:
@@ -272,9 +276,10 @@ try:
 			for obj in targets:
 				ra_ = obj.ra
 				dec_ = obj.dec
-				a = np.where(np.abs(ra_-ra)<ra_step/2)[0]			
-				b = np.where(np.abs(dec_-dec)<dec_step/2)[0]	
+				a = np.where(np.abs(ra_-ra)<ra_step/10)[0]			
+				b = np.where(np.abs(dec_-dec)<dec_step/10)[0]	
 				INT = np.intersect1d(a,b)
+				assert np.size(INT)<2
 
 				if np.shape(INT)[0] == 0 or (straylight and S_sl[INT]*corr_fact*param.SL_QE > obj.maximum_flux()): 
 					obj.visible_save[minute_to_load] = 0
