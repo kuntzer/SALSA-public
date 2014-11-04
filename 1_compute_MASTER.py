@@ -146,8 +146,7 @@ while (orbit_current <= orbit_end):
 	try:
 		map_obstot = load_map(orbit_current,folder)
 	except IOError:
-		print 'Error, could not load orbit %d' % orbit_current
-		exit()
+		raise IOError("Critical Error: Could not load orbit %d" % orbit_current)
 
 	while (minute <= a_end):
 		if not override:
@@ -156,8 +155,9 @@ while (orbit_current <= orbit_end):
 				ra, dec, S_sl = load_flux_file(minute, file_flux,folder=folder_flux)
 				minute += 1
 				continue
-			# If there is an error while loading the file, give up and go to the next minute
-			except IOError: pass
+			# If there is an error while loading the file, yell!
+			except IOError: 
+				raise IOError("Critical Error: Minute file %d not found" % minute)
 
 		sys.stdout.write( '\rComputing minute: %3d\tAbsolute: %6d\t' % ((minute-a_ini),minute) )
 		sys.stdout.flush()
