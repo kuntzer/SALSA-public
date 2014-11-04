@@ -82,7 +82,6 @@ c-----------------------------------------------------------------------
 
 	if (N_TARGETS.gt.n_targets_max) then
 		print *, "ERROR: The RA,DEC table is not big enough"
-		stop
 	endif
 
       do i = 1, N_TARGETS

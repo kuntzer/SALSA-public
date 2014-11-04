@@ -38,7 +38,7 @@ apogee = 800
 perigee= 800
 
 # orbit id 
-orbit_id = '620_35_AKTAR'
+orbit_id = 'ORBIT_ID'
  
 # 1, 2 or 3 (or, ...) into which folder ? Scheme is orbit_id_part/
 part = 1
@@ -209,15 +209,22 @@ while (orbit_current <= orbit_end):
 			sys.stdout.flush()
 
 		# Save the targets and the number of line to two separate files to optimise Fortran read.
-			np.savetxt('%s/INPUT/coord_targets.dat' % path, map_obs[:,1:3], delimiter=' ', fmt='%3.3f')
+			np.savetxt('%s/INPUT/coord_targets.dat' % path, map_obs[:,1:3], 
+						delimiter=' ', fmt='%3.3f')
 			f = open('%s/INPUT/number_of_targets.dat' % path, 'w')
 			f.write(str(np.shape(map_obs)[0])+'\n')
 			f.close()
 			os.chdir(os.path.join(os.path.abspath(sys.path[0]), '%s/CODE/' % path))
-			subprocess.call(["./stray_light"])
+			res=subprocess.call(["./stray_light"])
+			if not res == 0:
+				raise RuntimeError("Critical Error in stray light code")
+
 		        # Move the files to the right ouput folder
 			os.chdir(orig_dir)
-			subprocess.call(["mv", "%s/OUTPUT/straylight.out" % path,'%s/%s%d.dat' % (folder_flux,file_flux,minute)])
+			res=subprocess.call(["mv", "%s/OUTPUT/straylight.out" % path,
+								'%s/%s%d.dat' % (folder_flux,file_flux,minute)])
+			if not res == 0:
+				raise RuntimeError("Critical Error: impossible to move output file")
 		else:
 		      sys.stdout.write('No points. ')
 		      sys.stdout.flush()
@@ -233,7 +240,9 @@ while (orbit_current <= orbit_end):
 	sys.stdout.flush()
 
 	if monitor_angle_usage:
-		subprocess.call(["mv", "%s/OUTPUT/angle_usage.out" % path,'%s/angles_%d.dat' % (folder_flux,orbit_current)])
+		res=subprocess.call(["mv", "%s/OUTPUT/angle_usage.out" % path,'%s/angles_%d.dat' % (folder_flux,orbit_current)])
+		if not res == 0:
+			raise RuntimeError("Critical Error: impossible to move angle usage file")
 
 	# Computes the differences to the reference orbit
 	if adaptative_timestep and orbit_current>orbit_ini:
