@@ -40,7 +40,7 @@ from matplotlib.ticker import MaxNLocator, MultipleLocator, FormatStrFormatter
 ###########################################################################
 ### PARAMETERS
 # Orbit id
-orbit_id = '800_35_AKTAR'
+orbit_id = '<ORBIT_ID>'
 apogee=800
 perigee=800
 
@@ -48,7 +48,7 @@ perigee=800
 orbits_file = 'orbits.dat'
 
 # Minimum observable time for plots [h] (Only used for consecutive observation time)
-transit_duration = 10
+transit_duration = None
 
 # Maximum interruption time tolerated [min]
 max_interruptions = 99
@@ -57,7 +57,7 @@ max_interruptions = 99
 mag_max = 12.
 
 # Take SAA into account?
-SAA = False
+SAA = True
 
 # Print much information ?
 verbose = False
@@ -71,13 +71,13 @@ consecutive = False
 SL_post_treat = True
 
 # Stop before saving results to file.
-early_stop = False
+early_stop = True
 
 # Minimal # of days of obs (if consecutive == False), must be a list
-nb_obs_days = range(0,10,5)#[13]#range(20,45,5)#[13]#range(5,45,5)#[0,10,20,30,40]#range(10,17,1)##range(10,110,10)#
+nb_obs_days = [50]#range(10,110,10)#range(5,60,5)#[13]#range(20,45,5)#[13]#range(5,45,5)#[0,10,20,30,40]#range(10,17,1)##range(10,110,10)#
 
-# Minimal minutes to be observed per orbit (if consecutive == False)
-mins_t_obs_per_orbit = [80]#[78]#range(68,78,1)
+# Minimal minutes to be observed per orbit (if consecutive == False), must be a list
+mins_t_obs_per_orbit = [50]#[78]#range(68,78,1)
 
 # This is a way to vary the results by multiplying the whole pst by a number.
 # This is very easy as if the pst is multiplied by a constant, it can be taken out of the
@@ -114,8 +114,6 @@ for min_t_obs_per_orbit in mins_t_obs_per_orbit:
 
 		sky_coverage=0.
 	
-		output=open(os.path.join(folder_misc,skycoverage_fname),"a") 
-	
 		print 'ORBIT ID:\t\t%s\nPST factor:\t\t%d\nMin Days of Coverage:\t%d\nmin_t_obs_per_orbit\t%d (%.1f%%)\nMAGNITIUDE:\t\t%02.1f\nSAA :\t%g' % (orbit_id,pst_factor,nb_obs_day,min_t_obs_per_orbit,min_t_obs_per_orbit/period*100., mag_max, SAA)
 	
 		# loading data
@@ -124,8 +122,6 @@ for min_t_obs_per_orbit in mins_t_obs_per_orbit:
 	
 		worthy_targets = np.load(folder_misc+input_fname)
 		worthy_targets = worthy_targets['worthy_targets']
-
-		check=np.zeros_like(worthy_targets)
 	
 		max_len = 0
 		for k in range(0, len(worthy_targets)):
@@ -222,21 +218,12 @@ for min_t_obs_per_orbit in mins_t_obs_per_orbit:
 	###########################################################################
 	# non-consecutive
 		count = 0
-		count_day=0
-		nogo_count=0
+		check=np.zeros(len(worthy_targets))
 		if not consecutive:
-			times = np.loadtxt('resources/minute_table_'+str(orbit_id)+'.dat', delimiter=',',dtype='Int32')
-			a_end_orbits = np.linspace(1,param.last_orbits[orbit_id],param.last_orbits[orbit_id])
-			tmps = a_end_orbits
-			a_end_orbits = fast_orbit2a_end_vect(times, a_end_orbits, orbit_id)
-		
-			obs_tot = np.zeros(len(worthy_targets))
-			obs_orbit_tot = np.zeros(len(worthy_targets))
-			min_obs_time = nb_obs_day*24.*60.*min_t_obs_per_orbit/period
-		
-			nb_orbit_per_day = 24.*60. / period
+
+			sky_coverage=0.
 	
-			for ii in range (0, len(worthy_targets)):
+			for ii in range(len(worthy_targets)):
 				y = float(ii)
 				message = '\r%3.1f %%' % (y/float(len(worthy_targets))*100.)
 				sys.stdout.write(message)
@@ -244,24 +231,16 @@ for min_t_obs_per_orbit in mins_t_obs_per_orbit:
 	
 				visi = worthy_targets[ii].Visibility()
 				invi = worthy_targets[ii].Invisibility()
-	
-	
-				# Initialise all variables
-				k = 0
-				t_obs_per_orbit = np.zeros(param.last_orbits[orbit_id]+1)
-	
-				observations = invi-visi
-				observations=observations[observations>=min_t_obs_per_orbit]
-				if np.size(observations)>0:
-					check[ii] += observations.sum()
-				else: continue
 
-			sky_coverage=0.
-			#print np.size(check[check>nb_obs_day*24.*60.])
-			for ii in range(len(worthy_targets)):
-				if check[ii]<nb_obs_day*24.*60.: continue
-				rat, dect = worthy_targets[ii].Coordinates()
-				sky_coverage+=0.5/param.resx/param.resy*np.pi*np.cos(dect)
+				observations = invi-visi
+				validated=observations[observations>=min_t_obs_per_orbit]
+
+				if np.size(validated)>0:
+					check[ii] += validated.sum()
+
+				if check[ii]>nb_obs_day*24.*60.:
+					rat, dect = worthy_targets[ii].Coordinates()
+					sky_coverage+=0.5/param.resx/param.resy*np.pi*np.cos(dect)
 		
 			message = '\rComputations done.' 
 			sys.stdout.write(message)
@@ -269,15 +248,14 @@ for min_t_obs_per_orbit in mins_t_obs_per_orbit:
 	
 			print '\nSky coverage for %d days' % nb_obs_day
 
-			rslts = sky_coverage
-	
-			print nb_obs_day,'\t***', round(rslts*100.,3), ' % ***'
-			print >> output, nb_obs_day,'\t', round(rslts*100.,3)
+			print nb_obs_day,'\t***', round(sky_coverage*100.,3), ' % ***'
+			
+			output=open(os.path.join(folder_misc,skycoverage_fname),"a") 
+			print >> output, nb_obs_day,'\t', round(sky_coverage*100.,3)
+			output.close()
 	
 			if early_stop: continue
 	
-			if verbose: print obs_tot/24./60.
 			np.savez_compressed(folder_misc+output_fname, worthy_targets=worthy_targets, obs_tot=check)
 			print 'Filed saved as %s' % output_fname
-			output.close()
 
