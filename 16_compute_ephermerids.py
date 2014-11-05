@@ -42,7 +42,7 @@ from matplotlib.ticker import MaxNLocator, MultipleLocator, FormatStrFormatter
 ###########################################################################
 ### PARAMETERS
 # orbit_iditude of the orbit in km
-orbit_id = 'ID_STRING'
+orbit_id = '<ORBIT_ID>'
 apogee=800
 perigee=800
 
@@ -62,10 +62,10 @@ max_interruptions = 0 # see below period =
 t_acquisition = 0
 
 # Take into account the stray light?
-straylight = True
+straylight = False
 
 # Maximum visible magnitude
-mag_max = 12. #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!<< params
+mag_max = 9. #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!<< params
 
 # Include SAA ?
 SAA = True
@@ -73,7 +73,7 @@ SAA = True
 # This is a way to vary the results by multiplying the whole pst by a number.
 # This is very easy as if the pst is multiplied by a constant, it can be taken out of the
 # integral and only multplying the flux is equivalent to re-running all the simulations
-pst_factor = 1.
+pst_factor = 0.
 
 # Factor in the SL post treatment correction ?
 SL_post_treat = True
@@ -84,7 +84,7 @@ mirror_correction = True
 #####################################################################################################################
 # CONSTANTS AND PHYSICAL PARAMETERS
 period = altitude2period(apogee,perigee)
-max_interruptions = period - 1
+max_interruptions = period-1
 
 ###########################################################################
 ### INITIALISATION
@@ -147,6 +147,7 @@ ras = np.fromiter(iterable, np.float)
 iterable = (dec_i + dec_step/2+ i*dec_step for i in range(n_delta))
 decs = np.fromiter(iterable, np.float)
 
+dmax=np.hypot(ra_step/2.,dec_step/2.)
 ra_grid, dec_grid = np.meshgrid(ras, decs)
 
 visibility = np.zeros(np.shape(ra_grid))
@@ -175,11 +176,11 @@ sys.stdout.write(message)
 sys.stdout.flush()
 
 targets = []
-
+all_targets=[]
 for ra, dec in zip(np.ravel(ra_grid), np.ravel(dec_grid)):
 	id_ra = find_nearest(ras, ra)
 	id_dec = find_nearest(decs, dec)
-
+	all_targets.append([ra,dec])
 	targets.append(target_list('%3.1f/%2.1f' % (ra,dec), ra, id_ra, dec, id_dec, mag_max, int(period+3)))
 
 message = 'Done, %d targets prepared.\n' % len(targets)
@@ -190,7 +191,6 @@ sys.stdout.flush()
 corr_fact = 1.0
 if mirror_correction: corr_fact /= param.mirror_efficiency
 if SL_post_treat: corr_fact *= (1.0 - param.SL_post_treat_reduction)
-
 ############################################################################
 ### Start the anaylsis
 
@@ -198,9 +198,7 @@ start = time.time()
 
 # Prepare the arrays
 visibility = np.zeros(np.shape(ra_grid))
-#observations = np.zeros(len(name_cat)*)
 workspace = np.zeros(np.shape(ra_grid))
-#data = np.zeros(np.shape(ra_grid))
 
 # Load the reference times
 orbits = np.loadtxt(folder_misc+orbits_file,dtype='i4')
@@ -208,94 +206,83 @@ minutes_altitude = np.loadtxt('resources/minute_table_%s.dat' % orbit_id, delimi
 
 # Set variables for printing the status
 numberofminutes = minute_end+1 - minute_ini
-lo = fast_minute2orbit(minutes_altitude,minute_end, orbit_id)
 fo = fast_minute2orbit(minutes_altitude,minute_ini, orbit_id)
+lo = fast_minute2orbit(minutes_altitude,minute_end, orbit_id)
 lp = -1
 
-junk, junk, at_ini, junk = fast_orbit2times(minutes_altitude, fo, orbit_id)
+_,_,at_ini,_ = fast_orbit2times(minutes_altitude, fo, orbit_id)
 first_computed = computed_orbits[computed_orbits<=fo][-1]
 
 first_minute = minute_ini
 last_minute = minute_end
 
 if not fo == first_computed: 
-	junk, junk, minute_ini, junk = fast_orbit2times(minutes_altitude, first_computed, orbit_id)
+	_,_,minute_ini,_ = fast_orbit2times(minutes_altitude, first_computed, orbit_id)
 #	print '1st referenced orbit: %d\twanted orbit: %d' % (first_computed, fo)
-try:
-	for minute in range(minute_ini,minute_end+1):#+int(period)):
-		minute = int(minute)
-	
-		if SAA and fast_SAA(SAA_data, minute): SAA_at_minute = True
-		else: SAA_at_minute = False
 
-		orbit_current = fast_minute2orbit(minutes_altitude, minute, orbit_id)
-		if orbit_current > lp: 
-			lp = orbit_current
-			message = "Analysing orbit %d on %d...\t" % (lp,lo)
+for minute in range(minute_ini,minute_end+1):
+	minute = int(minute)
 
-			sys.stdout.write( '\r'*len(message) )
-			sys.stdout.write(message)
-			sys.stdout.flush()
+	if SAA and fast_SAA(SAA_data, minute): SAA_at_minute = True
+	else: SAA_at_minute = False
 
-		_, len_orbit, atc_ini, atc_end = fast_orbit2times(minutes_altitude, orbit_current, orbit_id)
-		try:
-			ra, dec, S_sl = load_flux_file(minute, file_flux, folder=folder_flux)
-			S_sl *= pst_factor
-			load = True
-			minute_to_load = minute-atc_ini#+shift
-		except IOError:
-		# if there is nothing then well, do nothing ie we copy the past values
-		# in which orbit are we ?
+	orbit_current = fast_minute2orbit(minutes_altitude, minute, orbit_id)
+	if orbit_current > lp: 
+		lp = orbit_current
+		message = "Analysing orbit %d of %d...\t" % (lp,lo)
+
+		sys.stdout.write( '\r'*len(message) )
+		sys.stdout.write(message)
+		sys.stdout.flush()
+
+	_, len_orbit, atc_ini, atc_end = fast_orbit2times(minutes_altitude, orbit_current, orbit_id)
+	try:
+		ra, dec, S_sl = load_flux_file(minute, file_flux, folder=folder_flux)
+		S_sl *= pst_factor
+		load = True
+		minute_to_load = minute-atc_ini
+	except IOError:
+	# if there is nothing then well, do nothing ie we copy the past values
 		
-		# get the previous orbit computed and copy the stray light data of this orbit :
-			#orbit_previous = orbits[orbits[:,0] < orbit_current][-1,0]
-			#minute_replacement = minute - atc_ini + shift #+ at_ini
-			minute_to_load = minute-atc_ini
-
+	# get the previous orbit computed and copy the stray light data of this orbit :
+		minute_to_load = minute-atc_ini
 			
-			for obj in targets:
-				if SAA_at_minute:
-					obj.current_visibility = 0
-				else:
-					try:
-						obj.current_visibility = obj.visible_save[minute_to_load]
-					except IndexError:
-						print minute_to_load, minute_end, atc_end, minute
-						exit()
+		for obj in targets:
+			if SAA_at_minute:
+				obj.current_visibility = 0
+			else:
+				try:
+					obj.current_visibility = obj.visible_save[minute_to_load]
+				except IndexError:
+					print minute_to_load, minute_end, atc_end, minute
+					raise IndexError()
+		load = False
 
-
-			load = False
-			# populate the visbility matrix
-#			for ii in range(0, targets[0].CountObjects()):
-
+	for obj in targets:
 		if load:
-			for obj in targets:
-				ra_ = obj.ra
-				dec_ = obj.dec
-				a = np.where(np.abs(ra_-ra)<ra_step/10)[0]			
-				b = np.where(np.abs(dec_-dec)<dec_step/10)[0]	
-				INT = np.intersect1d(a,b)
-				assert np.size(INT)<2
+			ra_ = obj.ra
+			dec_ = obj.dec
+			a = np.where(np.abs(ra_-ra)<ra_step/2.)[0]		
+			b = np.where(np.abs(dec_-dec[a])<dec_step/2.)[0]	
+			assert np.size(b)<2
+			INT = a[b]
+			assert np.size(INT)<2
 
-				if np.shape(INT)[0] == 0 or (straylight and S_sl[INT]*corr_fact*param.SL_QE > obj.maximum_flux()): 
-					obj.visible_save[minute_to_load] = 0
-					obj.current_visibility = 0
-					continue
-				else:				
-					obj.visible_save[minute_to_load] = 1
+			if np.shape(INT)[0] == 0 or (straylight and S_sl[INT]*corr_fact*param.SL_QE > obj.maximum_flux()):
+				obj.visible_save[minute_to_load] = 0
+				obj.current_visibility = 0
+				continue
+			else:				
+				obj.visible_save[minute_to_load] = 1
 
-				if SAA_at_minute: obj.current_visibility = 0
-				else: obj.current_visibility = 1
+			if SAA_at_minute: obj.current_visibility = 0
+			else: obj.current_visibility = 1
 
 		if minute == minute_ini:
-			for obj in targets:
-				obj.workspace=obj.current_visibility
-			continue
-
-		for obj in targets: obj.Next(minute,threshold_obs_time)
-
-except KeyboardInterrupt: print hilite('\nWARNING! USER STOPPED LOADING AT MINUTE %d' % minute,False,False)
-
+			obj.workspace=obj.current_visibility
+		else:
+			obj.Next(minute,threshold_obs_time)
+#------------------------ for loop ends here -----------------------------------------------------
 for ii in range(0, targets[0].CountObjects()): targets[ii].Next(minute,threshold_obs_time)
 
 
