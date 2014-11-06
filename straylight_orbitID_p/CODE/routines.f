@@ -323,7 +323,8 @@ c		   Get the surface area of the projected surface
 c	The first angle is angle between cell and the satellite
 c	The second angle is the angle between the LOS and the cell
 c	The 3rd is for the fact towards high delta we have smaller surface
-		   proj_surf = surf*dcos(angle)*abs(prod/(R_Earth*d))*dcos(delta_grid)
+		   proj_surf = surf*dcos(angle)*abs(prod/(R_Earth*d))
+     &		 *dcos(delta_grid)
 
                if(include_pst) then
                  energy = energy + 
@@ -338,7 +339,7 @@ c	The 3rd is for the fact towards high delta we have smaller surface
             endif
          enddo
       enddo
-      
+
       straylight_flux = energy * pixel !photons se px-1
 
       return
@@ -505,4 +506,5 @@ c     =========================================================================
 
       return
       end
+
 
