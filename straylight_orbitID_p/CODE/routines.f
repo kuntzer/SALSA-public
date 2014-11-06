@@ -314,13 +314,16 @@ c     ==========================================================================
 
                call R_3D(V, d)
 
-				call scalar_product(V, EARTH, prod) 
+               call scalar_product(V, EARTH, prod) 
 
 c		   Get the surface area of the projected surface
 		   angle = SphericalDistance(RA_SAT, DEC_SAT,
      &		 alpha_grid, delta_grid)
 
-		   proj_surf = surf*dcos(angle)*abs(prod/(R_Earth*d)) 
+c	The first angle is angle between cell and the satellite
+c	The second angle is the angle between the LOS and the cell
+c	The 3rd is for the fact towards high delta we have smaller surface
+		   proj_surf = surf*dcos(angle)*abs(prod/(R_Earth*d))*dcos(delta_grid)
 
                if(include_pst) then
                  energy = energy + 
