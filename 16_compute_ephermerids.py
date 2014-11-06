@@ -275,8 +275,8 @@ for minute in range(minute_ini,minute_end+1):
 			else:				
 				obj.visible_save[minute_to_load] = 1
 
-			if SAA_at_minute: obj.current_visibility = 0
-			else: obj.current_visibility = 1
+		if SAA_at_minute: obj.current_visibility = 0
+		else: obj.current_visibility = 1
 
 		if minute == minute_ini:
 			obj.workspace=obj.current_visibility
