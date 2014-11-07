@@ -21,7 +21,7 @@ class target_list(object):
 	Handle the targets and their visibility'''
 	import numpy as np
 	nb_targets = 0
-	obs_max=500
+	obs_max=2500
 
 	def __init__(self, name, ra, id_ra, dec, id_dec, mag, Int_period):
 		from numpy import zeros
@@ -34,10 +34,11 @@ class target_list(object):
 		self.mag= mag
 		self.max_mag=mag2flux(mag)
 
-		self.visible = zeros(target_list.obs_max)
-		self.invisible = zeros(target_list.obs_max)
+		self.visible = zeros([0])
+		self.invisible = zeros([0])
 		self.workspace = 0
 		self.current_visibility = 0
+		self.current_SAA_interruption = 0
 		self.visible_save = zeros(Int_period)
 		target_list.nb_targets+=1
 		self.ii = 0
@@ -81,6 +82,7 @@ class target_list(object):
 		except IndexError:
 			self.invisible = append(self.invisible, minute)
 		self.workspace = 0
+		self.current_SAA_interruption=0
 
 	def Is_visible(self,minute):
 		from numpy import shape, where
@@ -106,7 +108,20 @@ class target_list(object):
 		if self.Interruption(minimum):
 #			print self.workspace
 			self.Appear(minute-self.workspace)
-			self.Disappear(minute)
+			self.Disappear(minute-self.current_SAA_interruption)
+			if (self.workspace<=self.current_SAA_interruption and self.workspace>0):
+				# This almost could be an assert, but we want a nice error message
+				print
+				print "obj", self.ra, self.dec
+				print minute
+				print 'Appeared at %d' % (minute-self.workspace)
+				print 'Disappeared at %d' % (minute)
+				print 'Time spent in SAA is %d' % (self.current_SAA_interruption)
+				print 'Thus >> obs time = %d' % (self.invisible[-1]-self.visible[-1])
+				raise RuntimeError("More time in SAA than total visit time!")
+			#if self.current_SAA_interruption>10:
+			#	exit()
+			
 #			print self.workspace
 #			print '*'*13
 			self.ii += 1
