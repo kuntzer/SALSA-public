@@ -34,8 +34,8 @@ from resources.TimeStepping import *
 ######################################################################
 # PARAMETERS
 # km (only required to compute orbit's period)
-apogee = 800
-perigee= 800
+apogee = 700
+perigee= 700
 
 # orbit id 
 orbit_id = 'ORBIT_ID'
@@ -47,7 +47,7 @@ part = 1
 orbit_ini = 1
 
 # Last orbit to compute (see # of orbits in one year in parameters.py)
-orbit_end = 16
+orbit_end = 1331
 
 # Defintions of the steps
 orbit_step = 10
@@ -155,9 +155,9 @@ while (orbit_current <= orbit_end):
 				ra, dec, S_sl = load_flux_file(minute, file_flux,folder=folder_flux)
 				minute += 1
 				continue
-			# If there is an error while loading the file, yell!
+			# If there is an error while loading the file, compute it!
 			except IOError: 
-				raise IOError("Critical Error: Minute file %d not found" % minute)
+				pass
 
 		sys.stdout.write( '\rComputing minute: %3d\tAbsolute: %6d\t' % ((minute-a_ini),minute) )
 		sys.stdout.flush()
