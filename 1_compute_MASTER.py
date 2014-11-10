@@ -295,4 +295,4 @@ while (orbit_current <= orbit_end):
 # OUTPUTS THE FINAL REMARK
 end = time.time()
 elapsed_time = round((end-start)/60.,1)
-print 'Stray light calculation carried out in '+ str(elapsed_time) +' min for '+ str(total_targets)+ ' points. Have nice day!'
+print 'Stray light calculation carried out in '+ str(elapsed_time) +' min for '+ str(total_targets)+ ' points. Have a nice day!'
