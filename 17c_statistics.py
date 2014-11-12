@@ -32,7 +32,7 @@ ylim=[0,50]
 out_fname=None#"800_35_AKTAR_100x50_figures/skycoverage_stat_81min"
 
 # Nicer plot + exportation in pdf, eps
-fancy=True
+fancy=False
 
 ###############################################################################
 
@@ -50,10 +50,12 @@ for el in skycoverage:
 		legend=True
 	else:
 		label=None
-
-	line,=plt.plot(data[:,0],data[:,1],lw=lw,label=label)
 	if 'color' in el:
-		line.set_color=el['color']
+		color=el['color']
+		plt.plot(data[:,0],data[:,1],lw=lw,label=label,color=color)
+	else:
+		plt.plot(data[:,0],data[:,1],lw=lw,label=label)
+
 
 
 if legend:
