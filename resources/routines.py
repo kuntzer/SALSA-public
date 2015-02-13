@@ -91,7 +91,7 @@ def rev(angle):
 vrev = np.vectorize(rev)
 
 
-def flux2mag(noise, threshold=None):
+def flux2mag_conversion(noise, threshold=None):
 	''' Returns the maximum visible magnitude for a given flux ("noise") and with a threshold in ppm.
 	UNITS : in:  [ph/(s px)]
 		out: [mag]
@@ -113,7 +113,7 @@ def flux2mag(noise, threshold=None):
 
 	return mag
 
-def mag2flux(mag, threshold=None):
+def mag2flux_conversion(mag, threshold=None):
 	''' Returns the stray light to got a certain magnitude with a given noise("noise") and with a threshold in ppm.
  UNITS : in:  [mag]
 	  out: [ph/(s px)]
@@ -131,6 +131,92 @@ def mag2flux(mag, threshold=None):
 	noise = A * B * 10.**(mag*-0.4)
 
 	return noise * threshold
+
+def mag2flux(mag, threshold=None, mode="table") :
+	"""
+	Returns the maximum flux of noise to get a S/N given by threshold in ppm. 
+	Magnitudes according to the values in the parameters file.
+	If the mode is "table" (default), there will be an interpolation of the table given in parameters.py, the mode "compute" will compute the flux using the parameters of the telescope and the conversion in the V band for the stars.
+
+	Example:
+	mag2flux(9, threshold=10) will return the flux representing 10 ppm for a V=9 mag star
+	"""
+
+	import parameters as param
+	import scipy.interpolate
+
+	if mode == "compute" :
+		return mag2flux_conversion(mag, threshold)
+	elif not mode == "table":
+		raise ValueError("Mode not recognised.")
+
+	if threshold is None:
+		threshold = param.ppm_threshold
+	threshold *= 1e-6
+
+	x = param.flux_in_aperture[:,0]
+	y = np.log10(param.flux_in_aperture[:,1])
+	interp_out = scipy.interpolate.UnivariateSpline(x, y)
+	interp_in = scipy.interpolate.interp1d(x, y)
+
+	if mag >= np.amin(x) and mag <= np.amax(x):
+		flux = 10.**interp_in(mag)
+	else:
+		flux = 10.**interp_out(mag)
+
+	flux_per_px_in_psf = flux / (np.pi * param.radius_psf * param.radius_psf)
+
+	max_flux_tolerable = flux_per_px_in_psf * threshold
+
+	return max_flux_tolerable
+
+def flux2mag(flux, threshold=None, mode="table") :
+	"""
+	Returns the maximum magnitude of the signal to get a S/N given by threshold in ppm.
+
+	Example:
+	mag2flux(1e-2, threshold=10) will return the magntiude of the star to be observed to get a noise of S/N 10 ppm.
+	If the mode is "table" (default), there will be an interpolation of the table given in parameters.py, the mode "compute" will compute the magnitude using the parameters of the telescope and the conversion in the V band for the stars.
+	"""
+
+	import parameters as param
+	import scipy.interpolate
+
+	if mode == "compute" :
+		return flux2mag_conversion(mag, threshold)
+	elif not mode == "table":
+		raise ValueError("Mode not recognised.")
+
+	if threshold is None:
+		threshold = param.ppm_threshold
+	threshold *= 1e-6
+
+	if type(flux) == list:
+		flux = np.asarray(flux)
+	elif type(flux) in [np.float, np.float32, np.float64]:
+		flux = np.asarray([flux])
+
+	x = np.log10(param.flux_in_aperture[:,1])
+	y = param.flux_in_aperture[:,0]
+	interp_out = scipy.interpolate.UnivariateSpline(x, y)
+	interp_in = scipy.interpolate.interp1d(x, y)
+
+	flux = np.asarray(flux)
+	flux_of_star = flux / threshold
+	flux_in_aperture = flux_of_star * (np.pi * param.radius_psf * param.radius_psf)
+
+	flux_in_aperture = flux_in_aperture.clip(min=1e-40)
+
+	if np.log10(flux_in_aperture) >= np.amin(x) and np.log10(flux_in_aperture) <= np.amax(x):
+		mag = interp_in(np.log10(flux_in_aperture))	
+	else:
+		mag = interp_out(np.log10(flux_in_aperture))
+
+
+
+	mag[np.where(mag>param.magnitude_max)]=param.magnitude_max
+
+	return mag
 
 def fast_SAA(SAA, minute):
 	''' Returns whether the satellite is in the SAA (True) or not (False)
