@@ -95,7 +95,7 @@ file_flux = 'flux_'
 threshold_obs_time = period - max_interruptions + t_acquisition
 
 print 'ORBIT ID:\t%s\nmax_interruptions:%d+%d min\nMAGNITIUDE:\t%02.1f\nPST factor\t%g\nSAA\t\t%s' % (orbit_id,max_interruptions,t_acquisition, mag_max,pst_factor,SAA)
-
+print 'CHECK THIS\n**********\n', 'ppm threshold', param.ppm_threshold, '\n', 'Mirror througput', param.mirror_efficiency
 # Formatted folders definitions
 folder_flux, folder_figures, folder_misc = init_folders(orbit_id)
 
@@ -277,7 +277,8 @@ try:
 				INT = np.intersect1d(a,b)
 				assert np.size(INT)<2
 
-				if np.shape(INT)[0] == 0 or (straylight and S_sl[INT]*corr_fact*param.SL_QE > obj.maximum_flux()): 
+				S_sl_for_obj = S_sl[INT]*corr_fact*param.SL_QE
+				if np.shape(INT)[0] == 0 or (straylight and S_sl_for_obj > obj.maximum_flux()): 
 					obj.visible_save[minute_to_load] = 0
 					obj.current_visibility = 0
 					continue
@@ -291,7 +292,7 @@ try:
 
 		if minute == minute_ini:
 			for obj in targets:
-				obj.workspace=obj.current_visibility
+				obj.obs_time=obj.current_visibility
 			continue
 
 		for obj in targets: obj.Next(minute,threshold_obs_time)
@@ -328,5 +329,6 @@ if SL_post_treat: note+= '_%4.3fSLreduction' % param.SL_post_treat_reduction
 fname = 'ephemerids_inter_%d_mag_%3.1f%s' % (max_interruptions,mag_max,note)#,threshold_obs_time,fo,lo, note)
 print 'Filed saved as %s' % fname
 np.savez_compressed(folder_misc+fname, worthy_targets=worthy_targets)
+
 
 

@@ -40,9 +40,9 @@ from matplotlib.ticker import MaxNLocator, MultipleLocator, FormatStrFormatter
 ###########################################################################
 ### PARAMETERS
 # Orbit id
-orbit_id = '<ORBIT_ID>'
-apogee=800
-perigee=800
+orbit_id = '700_25_400nm'
+apogee=700
+perigee=700
 
 # File name for the list of orbit file
 orbits_file = 'orbits.dat'
@@ -51,7 +51,7 @@ orbits_file = 'orbits.dat'
 transit_duration = None
 
 # Maximum interruption time tolerated [min]
-max_interruptions = 99
+max_interruptions = 97
 
 # Maximum visible magnitude
 mag_max = 12.
@@ -71,18 +71,18 @@ consecutive = False
 SL_post_treat = True
 
 # Stop before saving results to file.
-early_stop = True
+early_stop = False
 
 # Minimal # of days of obs (if consecutive == False), must be a list
-nb_obs_days = [50]#range(10,110,10)#range(5,60,5)#[13]#range(20,45,5)#[13]#range(5,45,5)#[0,10,20,30,40]#range(10,17,1)##range(10,110,10)#
+nb_obs_days = [13]#range(1,61)#range(10,110,10)#range(5,60,5)#[13]#range(20,45,5)#[13]#range(5,45,5)#[0,10,20,30,40]#range(10,17,1)##range(10,110,10)#
 
 # Minimal minutes to be observed per orbit (if consecutive == False), must be a list
-mins_t_obs_per_orbit = [50]#[78]#range(68,78,1)
+mins_t_obs_per_orbit = [79]#[78]#range(68,78,1)
 
 # This is a way to vary the results by multiplying the whole pst by a number.
 # This is very easy as if the pst is multiplied by a constant, it can be taken out of the
 # integral and only multplying the flux is equivalent to re-running all the simulations
-pst_factor=0.
+pst_factor=1.
 
 # File name for the input file (in a compressed binary Python format)
 if SAA: note = '_SAA'
@@ -149,6 +149,7 @@ for min_t_obs_per_orbit in mins_t_obs_per_orbit:
 				y = float(ii)
 				visi = worthy_targets[ii].Visibility()
 				invi = worthy_targets[ii].Invisibility()
+				inter = worthy_targets[ii].get_interruption_time()
 	
 			# for every region in the sky/worthy target:
 			# >> Find when you can look with transit_duration [h] with maximal max_interruptions [min]
@@ -169,10 +170,11 @@ for min_t_obs_per_orbit in mins_t_obs_per_orbit:
 					# shorthand notations
 					vis = visi[k]
 					ini = invi[k]
+					inte = inter[k]
 	
 					# Try to compute the interruption time with the next observability window
 					try: 
-						time_to_next_vis = visi[k+1]-ini
+						time_to_next_vis = visi[k+1] - ini - inte
 						stop_to_observe = False
 					except IndexError: 
 						stop_to_observe = True
@@ -218,6 +220,7 @@ for min_t_obs_per_orbit in mins_t_obs_per_orbit:
 	###########################################################################
 	# non-consecutive
 		count = 0
+		period = altitude2period(apogee,perigee)
 		check=np.zeros(len(worthy_targets))
 		if not consecutive:
 
@@ -231,12 +234,22 @@ for min_t_obs_per_orbit in mins_t_obs_per_orbit:
 	
 				visi = worthy_targets[ii].Visibility()
 				invi = worthy_targets[ii].Invisibility()
+				inter = worthy_targets[ii].get_interruption_time()
 
-				observations = invi-visi
-				validated=observations[observations>=min_t_obs_per_orbit]
+				observations = invi - visi - inter
 
-				if np.size(validated)>0:
-					check[ii] += validated.sum()
+				validated_ids = observations>=min_t_obs_per_orbit
+
+				validated_observations = observations[validated_ids]
+				vinter = inter[validated_ids]
+				vvis = visi[validated_ids]
+				vinvi = invi[validated_ids]
+
+				if np.size(validated_observations)>0:
+					check[ii] += validated_observations.sum()
+					#print validated_observations; 
+					#obs_efficiency_in_orbit = validated_observations/period
+					#time_lost = np.ceil(obs_efficiency_in_orbit) - obs_efficiency_in_orbit
 
 				if check[ii]>nb_obs_day*24.*60.:
 					rat, dect = worthy_targets[ii].Coordinates()
@@ -258,4 +271,6 @@ for min_t_obs_per_orbit in mins_t_obs_per_orbit:
 	
 			np.savez_compressed(folder_misc+output_fname, worthy_targets=worthy_targets, obs_tot=check)
 			print 'Filed saved as %s' % output_fname
+
+
 

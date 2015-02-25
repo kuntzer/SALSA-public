@@ -36,7 +36,8 @@ class target_list(object):
 
 		self.visible = zeros([0])
 		self.invisible = zeros([0])
-		self.workspace = 0
+		self.interruption_time = zeros([0])
+		self.obs_time = 0
 		self.current_visibility = 0
 		self.current_SAA_interruption = 0
 		self.visible_save = zeros(Int_period)
@@ -57,6 +58,9 @@ class target_list(object):
 
 	def Invisibility(self):
 		return self.invisible
+
+	def get_interruption_time(self):
+		return self.interruption_time
 
 	def PrepareSave(self):
 		if self.ii < target_list.obs_max: 
@@ -81,7 +85,15 @@ class target_list(object):
 			self.invisible[self.ii] = minute
 		except IndexError:
 			self.invisible = append(self.invisible, minute)
-		self.workspace = 0
+		self.obs_time = 0
+		self.Count_interruption_time()
+		
+	def Count_interruption_time(self):
+		from numpy import append
+		try:
+			self.interruption_time[self.ii] = self.current_SAA_interruption
+		except IndexError:
+			self.interruption_time = append(self.interruption_time, self.current_SAA_interruption)
 		self.current_SAA_interruption=0
 
 	def Is_visible(self,minute):
@@ -97,7 +109,7 @@ class target_list(object):
 		else: return False
 
 	def Interruption(self, minimum):
-		if (not self.current_visibility == 1) and self.workspace >= minimum: return True
+		if (not self.current_visibility == 1) and self.obs_time >= minimum: return True
 		else : return False
 
 	def Continuity(self):
@@ -106,15 +118,15 @@ class target_list(object):
 
 	def Next(self,minute,minimum):
 		if self.Interruption(minimum):
-#			print self.workspace
-			self.Appear(minute-self.workspace)
-			self.Disappear(minute-self.current_SAA_interruption)
-			if (self.workspace<=self.current_SAA_interruption and self.workspace>0):
+#			print self.obs_time
+			self.Appear(minute-self.obs_time)
+			self.Disappear(minute)
+			if (self.obs_time<=self.current_SAA_interruption and self.obs_time>0):
 				# This almost could be an assert, but we want a nice error message
 				print
 				print "obj", self.ra, self.dec
 				print minute
-				print 'Appeared at %d' % (minute-self.workspace)
+				print 'Appeared at %d' % (minute-self.obs_time)
 				print 'Disappeared at %d' % (minute)
 				print 'Time spent in SAA is %d' % (self.current_SAA_interruption)
 				print 'Thus >> obs time = %d' % (self.invisible[-1]-self.visible[-1])
@@ -122,11 +134,11 @@ class target_list(object):
 			#if self.current_SAA_interruption>10:
 			#	exit()
 			
-#			print self.workspace
+#			print self.obs_time
 #			print '*'*13
 			self.ii += 1
-		elif self.Continuity(): self.workspace += 1
-		else: self.workspace = 0
+		elif self.Continuity(): self.obs_time += 1
+		else: self.obs_time = 0
 			
 		self.current_visibility = 0
 
@@ -189,4 +201,5 @@ def load_catalogue(fname,folder='resources', remove_duplicates = True, verbose=T
 		print message
 
 	return name, ra, dec, mag
+
 
