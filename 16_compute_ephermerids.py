@@ -42,7 +42,7 @@ from matplotlib.ticker import MaxNLocator, MultipleLocator, FormatStrFormatter
 ###########################################################################
 ### PARAMETERS
 # orbit_iditude of the orbit in km
-orbit_id = 'ORBIT_ID'
+orbit_id = '800_35_AKTAR_100x50'
 apogee=800
 perigee=800
 
@@ -329,6 +329,5 @@ if SL_post_treat: note+= '_%4.3fSLreduction' % param.SL_post_treat_reduction
 fname = 'ephemerids_inter_%d_mag_%3.1f%s' % (max_interruptions,mag_max,note)#,threshold_obs_time,fo,lo, note)
 print 'Filed saved as %s' % fname
 np.savez_compressed(folder_misc+fname, worthy_targets=worthy_targets)
-
 
 
