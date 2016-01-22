@@ -39,8 +39,8 @@ from matplotlib.ticker import MaxNLocator, MultipleLocator, FormatStrFormatter
 from mpl_toolkits.basemap import Basemap
 ###########################################################################
 ### PARAMETERS
-orbit_id_ref='700_25_AKTAR'
-orbit_id_other='700_25_AKTAR'
+orbit_id_other='700_25_conf4'
+orbit_id_ref='800_25_conf4'
 
 # Give fname without the extension !
 #sky_coverage_map_fname_ref = '301-sky_map-78-mag12-days10-to-40-accumulated' 
@@ -49,8 +49,8 @@ orbit_id_other='700_25_AKTAR'
 #sky_coverage_map_fname_ref = '301-sky_map-50-mag9-days10-to-90-accumulated'
 #sky_coverage_map_fname_other = '1000-sky_map-50-mag9-days10-to-90-accumulated'
 
-sky_coverage_map_fname_ref = '700_25_AKTAR-sky_map-78-mag12-days10-to-16_noSAA_0.0pst-obs_time'
-sky_coverage_map_fname_other = '700_25_AKTAR-sky_map-78-mag12-days10-to-16_SAA_0.0pst-obs_time'
+sky_coverage_map_fname_other = '700_25_conf4-sky_map-79-mag12_SAA_accumulated'
+sky_coverage_map_fname_ref = '800_25_conf4-sky_map-81-mag12_SAA_accumulated'
 
 # Nice plots?
 fancy=True
@@ -60,6 +60,13 @@ save = True
 
 # Show figures ?
 show = True
+
+# min of scale
+min_val=-28
+# max of scale
+max_val=28
+#
+step_scale=2
 
 ###########################################################################
 
@@ -89,26 +96,36 @@ delta = ref-other
 if fancy: figures.set_fancy()
 fig = plt.figure()
 ax=plt.subplot(111)
-ax.set_aspect(2.)
+#ax.set_aspect(2.)
 
 plt.grid() 
+print np.amax(delta)
+v = np.arange(min_val,max_val+step_scale, step_scale)
+vl = np.arange(min_val,max_val+step_scale, 2)
+CS = plt.contour( ra_grid,dec_grid,delta,colors='k',levels=vl)
 
-CS = plt.contour( ra_grid,dec_grid,delta,colors='k')
+plt.clabel(CS, inline=1,fmt='%+d',colors='k', fontsize=12, ticks=v)
 
-plt.clabel(CS, inline=1,fmt='%d',colors='k', fontsize=12)
 
-CS = plt.contourf( ra_grid ,dec_grid,delta,200,cmap=plt.cm.Paired)
+CS = plt.contourf( ra_grid ,dec_grid,delta,200,cmap=plt.cm.RdBu_r,levels=v)
 
 plt.yticks(np.arange(-80, 100, 20.))
 
-v = np.linspace(np.floor(np.nanmin(delta)),np.ceil(np.nanmax(delta)), 10, endpoint=True)
+#v = np.linspace(min_val,max_val, 9, endpoint=True)
  
-cbar = plt.colorbar(CS)
-cbar.set_ticklabels(np.round(v,1))
+cbar = plt.colorbar(CS, ticks=v)
+cbar.set_ticklabels([r"%+1.1f" % l for l in v])
 cbar.set_label(r'$\mathrm{Days}$')
 
-plt.xlabel('RA [deg]')
+plt.xlabel('RA [hours]')
 plt.ylabel('Dec [deg]')
+
+stepra = 3
+xticks = np.arange(0, 24+stepra, stepra)
+print "min delta: %+02.1f" % np.amin(delta)
+print "max delta: %+02.1f" % np.amax(delta)
+plt.xticks(xticks)
+ax.set_xticklabels([r"$%d\mathrm{h}$" % h for h in [12,9,6,3,0,21,18,15]])
 
 if show: plt.show()
 

@@ -39,7 +39,7 @@ from matplotlib.ticker import MaxNLocator, MultipleLocator, FormatStrFormatter
 ###########################################################################
 ### PARAMETERS
 # Orbit id
-orbit_id = '800_25_AKTAR'
+orbit_id = '6pm_800_25_conf3'
 apogee=800
 perigee=800
 
@@ -47,10 +47,10 @@ perigee=800
 orbits_file = 'orbits.dat'
 
 # Minimum observable time for plots [h]
-transit_duration = 6
+transit_duration = None
 
 # Maximum interruption time tolerated [min]
-max_interruptions = 99
+max_interruptions = None
 
 # Maximum visible magnitude
 mag_max = 12.
@@ -70,13 +70,13 @@ consecutive = False
 SL_post_treat = True
 
 # Stop before last reshaping of data and saving (if consecutive == False)
-early_stop = False
+early_stop = True
 
 # Minimal # of days of obs (if consecutive == False), must be a list
-nb_obs_days = range(10,17,1)#[13]#range(10,110,10)#
+nb_obs_days = [13]#range(10,17,1)#[13]#range(10,110,10)#
 
 # Minimal minutes to be observed per orbit (if consecutive == False)
-min_t_obs_per_orbit = 80
+min_t_obs_per_orbit = 81
 
 # This is a way to vary the results by multiplying the whole pst by a number.
 # This is very easy as if the pst is multiplied by a constant, it can be taken out of the
@@ -145,7 +145,7 @@ for nb_obs_day in nb_obs_days:
 	output=open(os.path.join(folder_misc,skycoverage_fname),"a") 
 
 	print 
-	print 'ORBIT ID:\t\t%s\nPST factor:\t\t%d\nMin Days of Coverage:\t%d\nmin_t_obs_per_orbit\t%d\nMAGNITIUDE:\t\t%02.1f' % (orbit_id,pst_factor,nb_obs_day,min_t_obs_per_orbit, mag_max)
+	print 'ORBIT ID:\t\t%s\nPST factor:\t\t%d\nMin Days of Coverage:\t%d\nmin_t_obs_per_orbit\t%d (%1.4g%%)\nMAGNITIUDE:\t\t%02.1f' % (orbit_id,pst_factor,nb_obs_day,min_t_obs_per_orbit, min_t_obs_per_orbit/period*100., mag_max)
 
 	print "Loadind from %s" % input_fname
 
@@ -160,12 +160,18 @@ for nb_obs_day in nb_obs_days:
 	count_T = 0
 	count_all=0
 	coords=[]
+	obs_sky_region = 0
+	obs_sky = 0
 #	cc=[]
 	for tgt, obs in zip(worthy_targets, obs_tot):
 		if obs == 0.: continue
 		count_all+=1
+		rat, dect = tgt.Coordinates()
+		obs_sky +=0.5/param.resx/param.resy*np.pi*np.cos(dect)
 		if observation_region.is_inside(tgt.Coordinates()):
 			count_T+=1
+
+			obs_sky_region +=0.5/param.resx/param.resy*np.pi*np.cos(dect)
 
 		id_ra, id_dec = find_nearest(ras+np.pi, tgt.Coordinates()[0]), find_nearest(decs, tgt.Coordinates()[1])
 		data_grid[id_dec,id_ra]=obs
@@ -174,9 +180,9 @@ for nb_obs_day in nb_obs_days:
 
 	print observation_region
 	print '%d cells on %d tot' % (count_T,count_all)
-	print 'Percentage of observation in region: %2.1f' % (float(count_T)/float((count_all))*100.), '%'
+	print 'Percentage of observation in region: %2.1f' % ((obs_sky_region/obs_sky)*100.), '%'
 	
-	print >> output, nb_obs_day,'\t',float(count_T)/float((count_all))*100.,'\t\%'
+	print >> output, nb_obs_day,'\t',(obs_sky_region/obs_sky)*100.,'\t\%'
 
 	output.close()
 

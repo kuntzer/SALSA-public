@@ -35,15 +35,15 @@ import resources.constants as const
 import resources.figures as figures
 from resources.targets import *
 from resources.coordinates import ecliptic2equatorial
+import resources.constellations as constel
 
 from matplotlib.ticker import MaxNLocator, MultipleLocator, FormatStrFormatter
-from mpl_toolkits.basemap import Basemap
 ###########################################################################
 ### PARAMETERS
 # orbit_id
-orbit_id='800_35_AKTAR'
-apogee=800
-perigee=800
+orbit_id='700_25_conf4'
+apogee=700
+perigee=700
 
 # First minute in data set !
 minute_ini = 0
@@ -55,15 +55,15 @@ minute_end = 1440*365/12
 orbits_file = 'orbits.dat'
 
 # Maximum visible magnitude
-mag_max = 12.
+mag_max = 9
 
 # Min nb_obs_day
-nb_obs_day = 5
+nb_obs_day = 50
 
 # min of scale
-min_val=10
+min_val=0
 # max of scale
-max_val=60
+max_val=90
 #
 step_scale=10
 
@@ -71,7 +71,7 @@ step_scale=10
 SAA = True
 
 # Minimal minutes to be observed per orbit (if consecutive = False)
-min_t_obs_per_orbit = 80
+min_t_obs_per_orbit = 49
 
 # Print much information ?
 verbose = False
@@ -82,7 +82,7 @@ SL_post_treat = True
 # This is a way to vary the results by multiplying the whole pst by a number.
 # This is very easy as if the pst is multiplied by a constant, it can be taken out of the
 # integral and only multplying the flux is equivalent to re-running all the simulations
-pst_factor = 0.
+pst_factor = 1.
 
 # If set to True, then it will be observations of at least (period - max_interruptions)
 # If set to False, then it is minimum (period - max_interruptions) minutes per orbit, 
@@ -90,10 +90,13 @@ pst_factor = 0.
 consecutive = False
 
 # Nice plots?
-fancy=True
+fancy= True
 
 # Save plots?
 save = True
+
+# Save data in ASCII form ?
+savetxt = False
 
 # Show figures ?
 show = True
@@ -101,9 +104,13 @@ show = True
 # Show ecliptic ?
 show_ecliptic=True
 
+# Show constellations ?
+include_constellation = True
+
 # File name for the input file (in a compressed binary Python format)
 if SAA: note = '_SAA'
 else: note = ''
+
 if not pst_factor == 1.: note += '_%1.1fpst' % pst_factor
 if SL_post_treat: note+= '_%4.3fSLreduction' % param.SL_post_treat_reduction
 if not consecutive: note += '_cumul_'
@@ -133,6 +140,8 @@ n_delta = param.resy
 
 ra_i = -np.pi
 ra_f = np.pi
+rah_i = 0.
+rah_f = 24.
 
 dec_i = -np.pi/2.
 dec_f = np.pi/2.
@@ -140,13 +149,19 @@ dec_f = np.pi/2.
 ra_step = (ra_f-ra_i)/n_alpha
 dec_step = (dec_f-dec_i)/n_delta
 
+rah_step = (rah_f-rah_i)/n_alpha
+
 iterable = (ra_i + ra_step/2+ i*ra_step for i in range(n_alpha))
 ras = np.fromiter(iterable, np.float)
+
+iterable = (rah_i + rah_step/2+ i*rah_step for i in range(n_alpha))
+rahs = np.fromiter(iterable, np.float)
 
 iterable = (dec_i + dec_step/2+ i*dec_step for i in range(n_delta))
 decs = np.fromiter(iterable, np.float)
 
 ra_grid, dec_grid = np.meshgrid(ras, decs)
+rah_grid, dec_grid = np.meshgrid(rahs, decs)
 
 data_grid = np.zeros(np.shape(ra_grid))
 data_grid_days = np.zeros(np.shape(ra_grid))
@@ -213,6 +228,7 @@ print 'coverage', float(co)/float(np.size(data_grid))*100, '%'
 ###########################################################################
 ### Plotting
 # transform 0 into no plotting in the data matrix
+
 mag_min= np.amin(data_grid[data_grid>0])
 data_grid[data_grid < mag_min] = np.nan
 
@@ -222,7 +238,7 @@ data_grid_days[data_grid_days < mag_min] = np.nan
 if fancy: figures.set_fancy()
 fig = plt.figure()
 ax=plt.subplot(111)
-ax.set_aspect(2.)
+#ax.set_aspect(2.)
 
 min_nb_obs_day = np.nanmin(data_grid)
 max_nb_obs_day = np.nanmax(data_grid)
@@ -232,43 +248,85 @@ plt.grid()
 ra_grid *= const.RAD
 dec_grid *= const.RAD
 data_grid[data_grid<min_nb_obs_day]=0
+if savetxt:
+	np.savetxt("%s_V%d_%dd_%dm.dat" % (orbit_id, mag_max, nb_obs_day, min_t_obs_per_orbit), data_grid)
+	np.savetxt("ra_grid.dat", ra_grid)
+	np.savetxt("dec_grid.dat", dec_grid)
+
+data_grid_cp = np.zeros_like(data_grid)
+ra_grid_cp = np.zeros_like(ra_grid)
+id_ra_neg = ra_grid<0
+id_ra_pos = ra_grid>0
+
+data_grid_cp[id_ra_pos] = data_grid[id_ra_neg]
+data_grid_cp[id_ra_neg] = data_grid[id_ra_pos]
+
+ra_grid_cp[id_ra_pos] = ra_grid[id_ra_neg]
+ra_grid_cp[id_ra_neg] = ra_grid[id_ra_pos]
+
+data_grid = data_grid_cp
+ra_grid = rah_grid
 
 v = np.arange(min_val,max_val+step_scale, step_scale)
 
 CS = plt.contour(ra_grid,dec_grid,data_grid,colors='k',levels=v)
 
-plt.clabel(CS, inline=1,fmt='%d',colors='red', fontsize=12)
+plt.clabel(CS, inline=1,fmt='%d',colors='k', fontsize=12)
 
 CS = plt.contourf(ra_grid ,dec_grid,data_grid,levels=v,cmap=plt.cm.winter)
 
 plt.yticks(np.arange(-80, 100, 20.))
 
+if include_constellation:
+	for co in constel.constellations:
 
-print v
-print np.nanmin(data_grid)
-print np.nanmax(data_grid)
+		co = np.asarray(co, dtype=np.float)
+
+		co[:,1] = co[:,1] / 1800.
+		co[:,2] = co[:,2] / 60.
+
+		idc = np.where(co[:,1] < 12.)
+		co[idc,1] = 12.-co[idc,1]
+
+		idc = np.where(co[:,1] > 12.)
+		co[idc,1] = 36.-co[idc,1]
+
+		for ii, star in enumerate(co):
+			if star[0] > 0:
+				plt.plot([co[ii-1, 1], star[1]], [co[ii-1, 2], star[2]], '.-', lw=0.7, c='grey', ms=2)		
+			else:
+				plt.plot(star[1], star[2], '.', c='grey', ms=2)
+
+#plt.plot(Gemini[:,1], Gemini[:,2], '.')
+
+stepra = 3
+xticks = np.arange(0, 24+stepra, stepra)
+
+plt.xticks(xticks)
+ax.set_xticklabels([r"$%d\mathrm{h}$" % h for h in [12,9,6,3,0,21,18,15]])
 
 #v = np.arange(np.nanmin(data_grid),np.nanmax(data_grid), 10)
 
 cbar = plt.colorbar(CS, ticks=v)
 #cbar.set_ticklabels(v)
-cbar.set_label(r'$\mathrm{Days}$')
+cbar.set_label(r'$\mathrm{Accumulated\ time\ [days]}$')
 
-plt.xlabel('RA [deg]')
+plt.xlabel('RA [hours]')
 plt.ylabel('Dec [deg]')
 
 if show_ecliptic:
 	a=np.linspace(-np.pi, np.pi)
 	b=np.zeros_like(a)
 	res=np.rad2deg(ecliptic2equatorial(a,b))
-	plt.plot(res[:,0],res[:,1],lw=2,color="red")
+	cra = np.linspace(24,0)
+	plt.plot(cra,res[:,1],lw=1.2,color="k")
 
 	# Sun in june
-	plt.plot([90.],[23.433],'o',color="yellow", markersize=8, zorder=5)
-	plt.text(-90.,80., r"$\mathrm{Summer\ sky}$", color='k', size='small', ha="center",weight='black')
+	#plt.plot([90.],[23.433],'o',color="yellow", markersize=8, zorder=5)
+	plt.text(18,80., r"$\mathrm{Summer\ sky}$", color='k', size='small', ha="center",weight='black')
 	# Sun in december
-	plt.plot([-90.],[-23.433],'o',color="yellow", markersize=8, zorder=5)
-	plt.text(90.,-80., r"$\mathrm{Winter\ sky}$", color='k', size='small', ha="center",weight='black')
+	#plt.plot([-90.],[-23.433],'o',color="yellow", markersize=8, zorder=5)
+	plt.text(6,-80., r"$\mathrm{Winter\ sky}$", color='k', size='small', ha="center",weight='black')
 
 
 ###########################################################################
