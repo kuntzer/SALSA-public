@@ -36,21 +36,21 @@ import resources.figures as figures
 from resources.targets import *
 
 from matplotlib.ticker import MaxNLocator, MultipleLocator, FormatStrFormatter
-from mpl_toolkits.basemap import Basemap
 ###########################################################################
 ### PARAMETERS
-orbit_id_other='700_25_conf4'
-orbit_id_ref='800_25_conf4'
+alt_other = 650
+alt_ref = 700
+
+orbit_id_other='6am_%d_5_conf4e' % alt_other
+orbit_id_ref='6am_%d_5_conf4e' % alt_ref
 
 # Give fname without the extension !
-#sky_coverage_map_fname_ref = '301-sky_map-78-mag12-days10-to-40-accumulated' 
-#sky_coverage_map_fname_other = '1000-sky_map-78-mag12-days10-to-40-accumulated'
 
-#sky_coverage_map_fname_ref = '301-sky_map-50-mag9-days10-to-90-accumulated'
-#sky_coverage_map_fname_other = '1000-sky_map-50-mag9-days10-to-90-accumulated'
+sky_coverage_map_fname_ref = '6am_%d_5_conf4e-sky_map-49-mag9_SAA_accumulated' % alt_ref
+sky_coverage_map_fname_other = '6am_%d_5_conf4e-sky_map-49-mag9_SAA_accumulated' % alt_other
 
-sky_coverage_map_fname_other = '700_25_conf4-sky_map-79-mag12_SAA_accumulated'
-sky_coverage_map_fname_ref = '800_25_conf4-sky_map-81-mag12_SAA_accumulated'
+sky_coverage_map_fname_ref = '6am_%d_5_conf4e-sky_map-79-mag12_SAA_accumulated' % alt_ref
+sky_coverage_map_fname_other = '6am_%d_5_conf4e-sky_map-78-mag12_SAA_accumulated' % alt_other
 
 # Nice plots?
 fancy=True
@@ -62,9 +62,9 @@ save = True
 show = True
 
 # min of scale
-min_val=-28
+min_val=-14
 # max of scale
-max_val=28
+max_val=14
 #
 step_scale=2
 

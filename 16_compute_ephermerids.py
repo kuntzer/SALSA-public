@@ -42,15 +42,16 @@ from matplotlib.ticker import MaxNLocator, MultipleLocator, FormatStrFormatter
 ###########################################################################
 ### PARAMETERS
 # orbit_iditude of the orbit in km
-orbit_id = '800_35_AKTAR_100x50'
-apogee=800
-perigee=800
+alt = 700
+orbit_id = '6am_%d_5_conf4e' % alt
+apogee=alt
+perigee=alt
 
 # First minute in data set !
 minute_ini = 0
 
 # Last minute to look for
-minute_end = 1440*365
+minute_end = 1440 * 365
 
 # File name for the list of orbit file
 orbits_file = 'orbits.dat'
@@ -62,10 +63,11 @@ max_interruptions = 0 # see below period =
 t_acquisition = 0
 
 # Take into account the stray light?
-straylight = False
+straylight = True
 
 # Maximum visible magnitude
-mag_max = 12. #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!<< params
+mag_max = 9.
+conversion_V_class = {9: 'G', 12: 'K'}
 
 # Include SAA ?
 SAA = True
@@ -73,13 +75,10 @@ SAA = True
 # This is a way to vary the results by multiplying the whole pst by a number.
 # This is very easy as if the pst is multiplied by a constant, it can be taken out of the
 # integral and only multplying the flux is equivalent to re-running all the simulations
-pst_factor = 0.
+pst_factor = 1.
 
 # Factor in the SL post treatment correction ?
 SL_post_treat = True
-
-# Factor in mirror efficiency for the equivalent star magnitude ?
-mirror_correction = True
 
 #####################################################################################################################
 # CONSTANTS AND PHYSICAL PARAMETERS
@@ -88,6 +87,7 @@ max_interruptions = period - 1
 
 ###########################################################################
 ### INITIALISATION
+flux_threshold = param.ppm_thresholds[mag_max] * 1e-6
 
 file_flux = 'flux_'
 
@@ -95,7 +95,7 @@ file_flux = 'flux_'
 threshold_obs_time = period - max_interruptions + t_acquisition
 
 print 'ORBIT ID:\t%s\nmax_interruptions:%d+%d min\nMAGNITIUDE:\t%02.1f\nPST factor\t%g\nSAA\t\t%s' % (orbit_id,max_interruptions,t_acquisition, mag_max,pst_factor,SAA)
-print 'CHECK THIS\n**********\n', 'ppm threshold', param.ppm_threshold, '\n', 'Mirror througput', param.mirror_efficiency
+
 # Formatted folders definitions
 folder_flux, folder_figures, folder_misc = init_folders(orbit_id)
 
@@ -157,16 +157,19 @@ data = np.zeros(np.shape(ra_grid))
 
 numberofminutes = minute_end+1 - minute_ini
 
-#minutes_altitude = np.loadtxt('resources/minute_table_%d.dat' % orbit_id, delimiter=',',dtype='Int32')
-
-maximum_sl_flux = mag2flux(mag_max)
-
 if SAA:
 	SAA_data = np.loadtxt('resources/SAA_table_%s.dat' % orbit_id, delimiter=',')
 	SAA_data = SAA_data[SAA_data[:,0]>= minute_ini]
 	SAA_data = SAA_data[SAA_data[:,0]<= minute_end]
 
 computed_orbits = np.loadtxt(folder_misc+orbits_file)[:,0]
+
+stellar_type = conversion_V_class[mag_max]
+stellar_flux = param.stellar_fluxes[stellar_type][mag_max]
+
+aperture_aera_in_px = np.pi * param.aperture_size * param.aperture_size
+
+
 ############################################################################
 ### Load catalogue and assign them to the nearest grid point
 
@@ -180,16 +183,15 @@ for ra, dec in zip(np.ravel(ra_grid), np.ravel(dec_grid)):
 	id_ra = find_nearest(ras, ra)
 	id_dec = find_nearest(decs, dec)
 
-	targets.append(target_list('%3.1f/%2.1f' % (ra,dec), ra, id_ra, dec, id_dec, mag_max, int(period+3)))
+	targets.append(target_list('%3.1f/%2.1f' % (ra,dec), ra, id_ra, dec, id_dec, mag_max, int(period+3), flux=stellar_flux))
 
 message = 'Done, %d targets prepared.\n' % len(targets)
 sys.stdout.write(message)
 sys.stdout.flush()
 
 # Apply the flux correction (SL post-treatment removal and the mirror efficiency)
-corr_fact = 1.0
-if mirror_correction: corr_fact /= param.mirror_efficiency
-if SL_post_treat: corr_fact *= (1.0 - param.SL_post_treat_reduction)
+corr_fact = 1.
+if SL_post_treat: corr_fact *= (1. - param.SL_post_treat_reduction)
 
 ############################################################################
 ### Start the anaylsis
@@ -277,12 +279,16 @@ try:
 				INT = np.intersect1d(a,b)
 				assert np.size(INT)<2
 
-				S_sl_for_obj = S_sl[INT]*corr_fact*param.SL_QE
-				if np.shape(INT)[0] == 0 or (straylight and S_sl_for_obj > obj.maximum_flux()): 
+				F_sl_for_obj = S_sl[INT] * corr_fact * param.SL_QE * aperture_aera_in_px
+				F_star = obj.get_flux() * flux_threshold # global throughput already included in the stellar flux!
+				
+				
+				if np.shape(INT)[0] == 0 or (straylight and F_sl_for_obj > F_star): 
 					obj.visible_save[minute_to_load] = 0
 					obj.current_visibility = 0
 					continue
-				else:				
+				else:		
+					#print S_sl[INT] * corr_fact * param.SL_QE * aperture_aera_in_px, S_sl[INT], corr_fact, param.SL_QE, aperture_aera_in_px, F_sl_for_obj, F_star		
 					obj.visible_save[minute_to_load] = 1
 
 				if SAA_at_minute: 
@@ -324,6 +330,7 @@ print "Time needed: %2.2f min" % elapsed_time
 threshold_obs_time -= t_acquisition
 if SAA: note = '_SAA'
 else: note = ''
+
 if not pst_factor == 1.: note += '_%1.1fpst' % pst_factor
 if SL_post_treat: note+= '_%4.3fSLreduction' % param.SL_post_treat_reduction
 fname = 'ephemerids_inter_%d_mag_%3.1f%s' % (max_interruptions,mag_max,note)#,threshold_obs_time,fo,lo, note)

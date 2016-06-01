@@ -46,4 +46,4 @@ timestamp_2018_01_01 = 1514764800
 
 sideral_day = 23.9344696 #[h]
 
-version = '0.7'
+version = '0.8'

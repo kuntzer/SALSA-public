@@ -39,9 +39,10 @@ from matplotlib.ticker import MaxNLocator, MultipleLocator, FormatStrFormatter
 ###########################################################################
 ### PARAMETERS
 # Orbit id
-orbit_id = '6pm_800_25_conf3'
-apogee=800
-perigee=800
+alt = 700
+orbit_id = '6am_%d_5_conf4e' % alt
+apogee=alt
+perigee=alt
 
 # File name for the list of orbit file
 orbits_file = 'orbits.dat'
@@ -76,7 +77,7 @@ early_stop = True
 nb_obs_days = [13]#range(10,17,1)#[13]#range(10,110,10)#
 
 # Minimal minutes to be observed per orbit (if consecutive == False)
-min_t_obs_per_orbit = 81
+min_t_obs_per_orbit = 79
 
 # This is a way to vary the results by multiplying the whole pst by a number.
 # This is very easy as if the pst is multiplied by a constant, it can be taken out of the

@@ -32,7 +32,7 @@ from resources.TimeStepping import *
 ### PARAMETERS
 
 # Orbit id same as in 0-*.py
-orbit_id = '620_35_AKTAR'
+orbit_id = '6am_700_5_conf4e'
 
 # First orbit in data set
 orbit_ini = 1
@@ -56,7 +56,7 @@ kk = 0
 orbit_old = 0
 ###########################################################################
 ### Look for computed orbits
-
+ 
 for orbit in range(orbit_ini, orbit_end+1):
 	# lookup the start and end time for the orbit
 	t_ini, t_end, a_ini, a_end = orbit2times(orbit,orbit_id)

@@ -41,9 +41,10 @@ from matplotlib.ticker import MaxNLocator, MultipleLocator, FormatStrFormatter
 ###########################################################################
 ### PARAMETERS
 # orbit_id
-orbit_id='700_25_conf4'
-apogee=700
-perigee=700
+alt = 650
+orbit_id = '6am_%d_5_conf4e' % alt
+apogee=alt
+perigee=alt
 
 # First minute in data set !
 minute_ini = 0
@@ -55,23 +56,23 @@ minute_end = 1440*365/12
 orbits_file = 'orbits.dat'
 
 # Maximum visible magnitude
-mag_max = 9
+mag_max = 12
 
 # Min nb_obs_day
-nb_obs_day = 50
+nb_obs_day = 13
 
 # min of scale
 min_val=0
 # max of scale
-max_val=90
+max_val=65
 #
-step_scale=10
+step_scale=5
 
 # Take SAA into account?
 SAA = True
 
 # Minimal minutes to be observed per orbit (if consecutive = False)
-min_t_obs_per_orbit = 49
+min_t_obs_per_orbit = 59
 
 # Print much information ?
 verbose = False
@@ -206,12 +207,10 @@ for index_target, target in enumerate(worthy_targets):
 		data_grid[id_dec, id_ra] = obs_tot[index_target]/60./24.
 		if verbose: print target.Coordinates()[0]*180./np.pi,'\t',target.Coordinates()[1]*180./np.pi,'\t', obs_tot[index_target]/24./60.
 
-if verbose: print 'obs start | obs end | hours of obs'
+if verbose: print 'obs start | obs end | days of obs'
 
 print np.amin(data_grid), np.amax(data_grid)
 
-co = np.size(data_grid[np.where(data_grid>0)])
-print 'coverage', float(co)/float(np.size(data_grid))*100, '%'
 
 #plt.figure()
 
@@ -228,12 +227,11 @@ print 'coverage', float(co)/float(np.size(data_grid))*100, '%'
 ###########################################################################
 ### Plotting
 # transform 0 into no plotting in the data matrix
+val_min= np.amin(data_grid[data_grid>0])
+data_grid[data_grid < val_min] = np.nan
 
-mag_min= np.amin(data_grid[data_grid>0])
-data_grid[data_grid < mag_min] = np.nan
-
-mag_min= np.amin(data_grid_days[data_grid_days>0])
-data_grid_days[data_grid_days < mag_min] = np.nan
+val_min= np.amin(data_grid_days[data_grid_days>0])
+data_grid_days[data_grid_days < val_min] = np.nan
 
 if fancy: figures.set_fancy()
 fig = plt.figure()

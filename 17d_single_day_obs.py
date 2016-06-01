@@ -44,23 +44,36 @@ from matplotlib.ticker import MaxNLocator, MultipleLocator, FormatStrFormatter
 ###########################################################################
 ### PARAMETERS
 # Orbit id
-orbit_id = '700_25_400nm'
+orbit_id = '6am_700_25_conf4'
 apogee=700
 perigee=700
 
 ddate = [{'name':'1st January', 'dayofyear':1}, {'name':'5th April', 'dayofyear':95}, {'name':'21st June', 'dayofyear':172}, {'name':'5th September', 'dayofyear':248}, {'name':'21st December', 'dayofyear':355}]
+ddate = [{'name':'21 January 2018', 'dayofyear':20},
+	 {'name':'21 February 2018', 'dayofyear':51},
+	 {'name':'21 March 2018', 'dayofyear':79},
+	 {'name':'21 April 2018', 'dayofyear':110},
+	 {'name':'21 May 2018', 'dayofyear':140},
+	 {'name':'21 June 2018', 'dayofyear':171},
+	 {'name':'21 July 2018', 'dayofyear':201},
+	 {'name':'19 August 2018', 'dayofyear':230},
+	 {'name':'18 September 2018', 'dayofyear':260},
+	 {'name':'17 October 2018', 'dayofyear':289},
+	 {'name':'16 November 2018', 'dayofyear':309},
+	 {'name':'15 December 2018', 'dayofyear':343},
+]
 
 # Maximum interruption time tolerated [min]
 max_interruptions = 97
 
 # Maximum visible magnitude
-mag_max = 12.
+mag_max = 9.
 
 # Take SAA into account?
 SAA = True
 
 # Show plot ?
-show = True
+show = False
 
 # Save plot ?
 save = True
@@ -70,9 +83,9 @@ fancy = True
 # min of scale
 min_val=0
 # max of scale
-max_val=100
+max_val=24
 #
-step_scale=10
+step_scale=2
 
 # Print much information ?
 verbose = False
@@ -84,19 +97,14 @@ SL_post_treat = True
 early_stop = False
 
 # Minimal minutes to be observed per orbit (if consecutive == False), must be a list
-min_t_obs_per_orbit = 79 # 79
+min_t_obs_per_orbit = 0 # 79
 
 # This is a way to vary the results by multiplying the whole pst by a number.
 # This is very easy as if the pst is multiplied by a constant, it can be taken out of the
 # integral and only multplying the flux is equivalent to re-running all the simulations
 pst_factor=1.
 
-# File name for the input file (in a compressed binary Python format)
-if SAA: note = '_SAA'
-else: note = ''
-if not pst_factor == 1.: note += '_%1.1fpst' % pst_factor
-if SL_post_treat: note+= '_%4.3fSLreduction' % param.SL_post_treat_reduction
-input_fname = 'ephemerids_inter_%d_mag_%3.1f%s.npz' % (max_interruptions,mag_max,note)
+
 
 for iddate in range(len(ddate)):
 
@@ -109,6 +117,15 @@ for iddate in range(len(ddate)):
 	minute_end = (ddate[iddate]['dayofyear']) * 1440
 
 	print '*'*30, 'min_t_obs_per_orbit %1.1f' % min_t_obs_per_orbit
+
+	
+	# File name for the input file (in a compressed binary Python format)
+	if SAA: note = '_SAA'
+	else: note = ''
+	if not pst_factor == 1.: note += '_%1.1fpst' % pst_factor
+	if SL_post_treat: note+= '_%4.3fSLreduction' % param.SL_post_treat_reduction
+	input_fname = 'ephemerids_inter_%d_mag_%3.1f%s.npz' % (max_interruptions,mag_max,note)
+
 
 	skycoverage_fname = 'skycoverage_%dmin_V%3.1f%s.txt' % (min_t_obs_per_orbit,mag_max,note)
 	#####################################################################################################################
@@ -126,7 +143,7 @@ for iddate in range(len(ddate)):
 	# loading data
 	sys.stdout.write("Loading worthy targets from %s ...\t" % input_fname)
 	sys.stdout.flush()
-	
+
 	worthy_targets = np.load(folder_misc+input_fname)
 	worthy_targets = worthy_targets['worthy_targets']
 	
@@ -295,15 +312,16 @@ for iddate in range(len(ddate)):
 	###########################################################################
 	# cycling through the targets:
 	obs_time = np.zeros(len(worthy_targets))
+	totxtdata = []
 	for index_target, target in enumerate(worthy_targets):
 	#	tar_start = start_obs[index_target,:]
 	#	tar_stop = stop_obs[index_target,:]
 	
 	#print target.Coordinates()[0]*180./np.pi, target.Coordinates()[1]*180./np.pi
-		if verbose: print index_target, target.Coordinates()[0]*180./np.pi, target.Coordinates()[1]*180./np.pi
+		#if verbose: print index_target, target.Coordinates()[0]*180./np.pi, target.Coordinates()[1]*180./np.pi
 	
 		if obs_tot[index_target]>0.:
-			obs_time[index_target]=obs_tot[index_target]/1440. * 100.
+			obs_time[index_target]=obs_tot[index_target]/60.##/1440. * 100.
 	
 		# Associate the density to a grid point
 		if target.Coordinates()[0] < np.pi:
@@ -314,12 +332,17 @@ for iddate in range(len(ddate)):
 	
 		if data_grid[id_dec, id_ra] == 0 and obs_tot[index_target]>0.:
 			data_grid_days[id_dec, id_ra] = 1
-			data_grid[id_dec, id_ra] = obs_tot[index_target]/1440. * 100.
-			if verbose: print target.Coordinates()[0]*180./np.pi,'\t',target.Coordinates()[1]*180./np.pi,'\t', obs_tot[index_target]/1440. * 100.
+			data_grid[id_dec, id_ra] = obs_tot[index_target]/60.#1440. * 100.
+			if verbose: print target.Coordinates()[0]*180./np.pi,'\t',target.Coordinates()[1]*180./np.pi,'\t', obs_tot[index_target]/60.##/1440. * 100.
+			totxtdata.append([target.Coordinates()[0], target.Coordinates()[1], obs_tot[index_target]])
 	
 	if verbose: print 'obs start | obs end | hours of obs'
 	
 	print np.amin(data_grid), np.amax(data_grid)
+
+	print np.shape(obs_tot)
+	totxtdata = np.asarray(totxtdata)
+	
 	
 	###########################################################################
 	### Plotting
@@ -350,39 +373,25 @@ for iddate in range(len(ddate)):
 	
 	plt.clabel(CS, inline=1,fmt='%d',colors='red', fontsize=12)
 	
-	CS = plt.contourf(ra_grid ,dec_grid,data_grid,levels=v,cmap=plt.cm.winter)
+	CS = plt.contourf(ra_grid, dec_grid, data_grid, levels=v, cmap=plt.cm.winter)
 	
 	plt.yticks(np.arange(-80, 100, 20.))
 	
 	
-	print v
-	print np.nanmin(data_grid)
-	print np.nanmax(data_grid)
+	#print v
+	#print np.nanmin(data_grid)
+	#print np.nanmax(data_grid)
 	
-	#v = np.arange(np.nanmin(data_grid),np.nanmax(data_grid), 10)
+	#v = np.arange(0,1440, 60)
 	
 	cbar = plt.colorbar(CS, ticks=v)
-	cbar.ax.set_yticklabels([r'$%g\%%$' % tv for tv in v])
+	#cbar.ax.set_yticklabels([r'$%g\%%$' % tv for tv in v])
 	
-	cbar.set_label(r'$\mathrm{Full\ day\ of\ observation}$')
+	cbar.set_label(r'$\mathrm{Observation\ time\ [h]}$')
 	
 	plt.xlabel('RA [deg]')
 	plt.ylabel('Dec [deg]')
-	plt.title(date_looked_for)
-	show_ecliptic = True
-	if show_ecliptic:
-		a=np.linspace(-np.pi, np.pi)
-		b=np.zeros_like(a)
-		res=np.rad2deg(ecliptic2equatorial(a,b))
-		plt.plot(res[:,0],res[:,1],lw=2,color="red")
-	
-		# Sun in june
-		plt.plot([90.],[23.433],'o',color="yellow", markersize=8, zorder=5)
-		plt.text(-90.,80., r"$\mathrm{Summer\ sky}$", color='k', size='small', ha="center",weight='black')
-		# Sun in december
-		plt.plot([-90.],[-23.433],'o',color="yellow", markersize=8, zorder=5)
-		plt.text(90.,-80., r"$\mathrm{Winter\ sky}$", color='k', size='small', ha="center",weight='black')
-	
+	plt.title(date_looked_for)	
 	
 	###########################################################################
 	if not SAA: note = '_noSAA'
@@ -393,7 +402,10 @@ for iddate in range(len(ddate)):
 		fname = '%s-sky_map-%d-mag%d_onday%d%s' % (orbit_id,min_t_obs_per_orbit,mag_max,ddate[iddate]['dayofyear'],note)
 		figures.savefig(folder_figures+fname, fig, fancy)
 	
-		print 'saved as %s' % fname
+		print 'figure saved as %s' % fname
+
+		np.savetxt(folder_misc+fname+'.dat', totxtdata, fmt='%1.3f, %1.3f, %d')#, header='ra [rad], dec [rad], obstime [min]')
+		print 'ASCII file saved as %s' % fname
 
 
 if show: plt.show()

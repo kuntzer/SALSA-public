@@ -50,13 +50,13 @@ import matplotlib.lines as mlines
 #####################################################################################################################
 # PARAMETERS
 # Orbital elements
-apogee=700
-perigee=700
-orbit_id = 1000
+apogee=650
+perigee=650
+orbit_id = '6am_650_5_conf4e'
 
 # First minute in data set !
-minute_ini = 0
-minute_end = 10
+minute_ini = 75#1440 * 172
+minute_end = 81#1440 * 172 + 100
 
 # File name for the output data file
 orbits_file = 'orbits.dat'
@@ -65,16 +65,17 @@ orbits_file = 'orbits.dat'
 fancy = False 
 
 # compare the data to the flux of different stars
-magnitudes = True 
+magnitudes = False 
 
 # Show stray light contour map ?
 straylight = True
 
 # Draw boundaries ?
-boundaries = True
+boundaries = False
 
 # Speeds up by not loading the different position files, does not save, but shows --> for new implementation or debugging
-future = False
+future = True
+save = False
 # TODO:
 # - For minute (orbit_ID 800) 363500, contour of zone better
 
@@ -85,17 +86,19 @@ file_moon       = 'moon_%s.dat' % orbit_id
 # Factor in the SL post treatment correction ?
 SL_post_treat = True
 # Factor in mirror efficiency for the equivalent star magnitude ?
-mirror_correction = True
+mirror_correction = False
 #####################################################################################################################
 # CONSTANTS AND PHYSICAL PARAMETERS
 period = altitude2period(apogee,perigee)
 
+sl_min = 1e-9
+sl_max = 0.1
 #####################################################################################################################
 # INITIALISATION
 file_flux = 'flux_'
 # Formatted folders definitions
 folder_flux, folder_figures, folder_misc = init_folders(orbit_id)
-folder_figures= '%d_figures/maps/' % (orbit_id)
+folder_figures= '%s_figures/maps/' % (orbit_id)
 
 #params = {'backend': 'ps','axes.labelsize': 14,'text.fontsize': 18,'legend.fontsize': 18,'xtick.labelsize': 14,'ytick.labelsize': 14,'text.usetex': True}
 #plt.rcParams.update(params)
@@ -167,20 +170,20 @@ dec_f = np.pi/2.
 ra_step = (ra_f-ra_i)/n_alpha
 dec_step = (dec_f-dec_i)/n_delta
 
-iterable = (ra_i + i*ra_step for i in range(n_alpha+1))
+iterable = (ra_i + i*ra_step for i in range(n_alpha))
 ras = np.fromiter(iterable, np.float)-np.pi
 
-iterable = (dec_i + i*dec_step for i in range(n_delta+1))
+iterable = (dec_i + i*dec_step for i in range(n_delta))
 decs = np.fromiter(iterable, np.float)
 
 ra_grid, dec_grid = np.meshgrid(ras, decs)
 
 grid_points0 = np.zeros(np.shape(ra_grid))
 
-iterable = (ra_i + ra_step/2 + i*ra_step for i in range(n_alpha+1))
+iterable = (ra_i + ra_step/2 + i*ra_step for i in range(n_alpha))
 ras2 = np.fromiter(iterable, np.float)-np.pi
 
-iterable = (dec_i + dec_step/2 + i*dec_step for i in range(n_delta+1))
+iterable = (dec_i + dec_step/2 + i*dec_step for i in range(n_delta))
 decs2 = np.fromiter(iterable, np.float)
 
 #####################################################################################################################
@@ -194,7 +197,7 @@ orbits = np.loadtxt(folder_misc+orbits_file,dtype='i4')
 list_minutes = -1. * np.ones( ( np.shape(orbits)[0] + 2 ) * period )
 
 id_min = 0
-times = np.loadtxt('resources/minute_table_%d.dat' % orbit_id, delimiter=',',dtype='Int32')
+times = np.loadtxt('resources/minute_table_%s.dat' % orbit_id, delimiter=',',dtype='Int32')
 for ii, orbit_current in enumerate(orbits[:,0]):
 	t_ini, t_end, a_ini, a_end = fast_orbit2times(times,orbit_current,orbit_id)
 	for minute in range(a_ini, a_end+1):
@@ -253,6 +256,7 @@ for id_min, minute in enumerate(list_minutes):
 		# Apply the flux correction (SL post-treatment removal and the mirror efficiency)
 		if mirror_correction: S_sl /= param.mirror_efficiency
 		if SL_post_treat: S_sl *= (1.0 - param.SL_post_treat_reduction)
+		S_sl *= param.SL_QE
 
 		# Now we compare the flux with the magnitude of the star.
 		if magnitudes: S_sl = flux2mag(S_sl,param.ppm_threshold)
@@ -287,8 +291,8 @@ for id_min, minute in enumerate(list_minutes):
 			v = np.linspace(param.magnitude_min,param.magnitude_max, (param.magnitude_max-param.magnitude_min+1), endpoint=True)
 			t = map(figures.format_mag, v)
 		else:
-			vf = np.logspace(np.log10(param.sl_min), np.log10(param.sl_max), np.log10(param.sl_max)-np.log10(param.sl_min)*2, endpoint=True)
-			v = np.logspace(np.log10(param.sl_min), np.log10(param.sl_max), np.log10(param.sl_max)-np.log10(param.sl_min)+1, endpoint=True)
+			vf = np.logspace(np.log10(sl_min), np.log10(sl_max), np.log10(sl_max)-np.log10(sl_min)*2, endpoint=True)
+			v = np.logspace(np.log10(sl_min), np.log10(sl_max), np.log10(sl_max)-np.log10(sl_min)+1, endpoint=True)
 			t = map(figures.format_log10, v)
 
 
@@ -304,7 +308,7 @@ for id_min, minute in enumerate(list_minutes):
 		dec = dec + np.random.random(ra.shape[0]) * 1e-6
 		zi = griddata((ra, dec), S_sl, (xi[None,:], yi[:,None]), method='cubic')
 
-#		print np.log10(param.sl_max)-np.log10(param.sl_min)
+#		print np.log10(sl_max)-np.log10(sl_min)
 
 		# if not close enough, mask value
 		# cosmetics
@@ -328,7 +332,7 @@ for id_min, minute in enumerate(list_minutes):
 
 			for x, y, c_sl in zip(ra, dec, S_sl):
 				if magnitudes: cc = (c_sl-param.magnitude_min)/(param.magnitude_max+0.2-param.magnitude_min)
-				else: cc = (np.log10(c_sl)-np.log10(param.sl_min))/(np.log10(param.sl_max)-np.log10(param.sl_min))
+				else: cc = (np.log10(c_sl)-np.log10(sl_min))/(np.log10(sl_max)-np.log10(sl_min))
 				ax.add_artist(Rectangle(xy=(x-w/2,y-h/2), color=cmap(cc), width=w, height=h, zorder=0))#,
 
 
@@ -485,17 +489,19 @@ for id_min, minute in enumerate(list_minutes):
 	if future:
 		plt.show()
 		exit()
+	if not save:
+		plt.show()
 
 	if magnitudes: fname = '%s/flux_%07d' % (folder_figures, minute)
 	else: fname = '%s/straylight_%07d' % (folder_figures, minute)
-	if (fancy):
+	if (fancy and save):
 		plt.savefig(fname+'.eps')
 		os.system("epstopdf "+fname+".eps")
 		os.system('pdfcrop '+fname+'.pdf')
 		os.system('mv '+fname+'-crop.pdf '+fname+'.pdf')
 		os.system('pdftocairo -png '+fname+'.pdf'+' '+fname)
 
-	plt.savefig(fname+'.png', dpi=param.dpi)
+	if save: plt.savefig(fname+'.png', dpi=param.dpi)
 
 	plt.close()
 	del ra, dec, S_sl

@@ -21,15 +21,12 @@ import numpy as np
 def savefig(fname,fig,fancy=False):
 	import os
 	import subprocess
+	import parameters as param
 
-	directory=os.path.dirname(fname)
-	if not os.path.exists(directory):
-		os.makedirs(directory)
-
-	fig.savefig(fname+'.png',dpi=300)
+	fig.savefig(fname+'.png',dpi=param.dpi)
 
 	if fancy: 
-		fig.savefig(fname+'.eps',transparent=True)
+		fig.savefig(fname+'.eps',dpi=param.dpi,transparent=True)
 		os.system("epstopdf "+fname+".eps")
 		command = 'pdfcrop %s.pdf' % fname
 		subprocess.check_output(command, shell=True)

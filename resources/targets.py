@@ -15,24 +15,29 @@ REQUIRES: standard python libraries, specific libraries in resources/
 REMARKS: <none>
 '''
 
+import numpy as np
 
 class target_list(object):
 	''' CLASS CHEOPS OBJECT OF INTEREST
 	Handle the targets and their visibility'''
-	import numpy as np
 	nb_targets = 0
 	obs_max=2500
 
-	def __init__(self, name, ra, id_ra, dec, id_dec, mag, Int_period):
+	def __init__(self, name, ra, id_ra, dec, id_dec, mag, Int_period, flux=None):
 		from numpy import zeros
-		from resources.routines import mag2flux
+
 		self.name = name
 		self.ra = ra
 		self.id_ra = id_ra
 		self.id_dec= id_dec
 		self.dec= dec
 		self.mag= mag
-		self.max_mag=mag2flux(mag)
+
+		if flux is None:
+			from resources.routines import mag2flux
+			self.flux=mag2flux(mag)
+		else:
+			self.flux = flux
 
 		self.visible = zeros([0])
 		self.invisible = zeros([0])
@@ -50,8 +55,8 @@ class target_list(object):
 	def Coordinates(self):
 		return self.ra, self.dec
 
-	def maximum_flux(self):
-		return self.max_mag
+	def get_flux(self):
+		return self.flux
 
 	def Visibility(self):
 		return self.visible
@@ -80,27 +85,24 @@ class target_list(object):
 			self.visible = append(self.visible, minute)
 
 	def Disappear(self,minute):
-		from numpy import append
 		try:
 			self.invisible[self.ii] = minute
 		except IndexError:
-			self.invisible = append(self.invisible, minute)
+			self.invisible = np.append(self.invisible, minute)
 		self.obs_time = 0
 		self.Count_interruption_time()
 		
 	def Count_interruption_time(self):
-		from numpy import append
 		try:
 			self.interruption_time[self.ii] = self.current_SAA_interruption
 		except IndexError:
-			self.interruption_time = append(self.interruption_time, self.current_SAA_interruption)
+			self.interruption_time = np.append(self.interruption_time, self.current_SAA_interruption)
 		self.current_SAA_interruption=0
 
 	def Is_visible(self,minute):
-		from numpy import shape, where
-		if shape(self.visible)[0] == 0 : return False
+		if np.shape(self.visible)[0] == 0 : return False
 
-		index = where(self.visible <= minute)
+		index = np.where(self.visible <= minute)
 
 		try: dis = self.invisible[index][-1]
 		except IndexError: return True
@@ -147,7 +149,6 @@ class target_list(object):
 
 
 def load_catalogue(fname,folder='resources', remove_duplicates = True, verbose=True):
-	import numpy as np
 	import csv
 
 	name = list()
@@ -201,5 +202,4 @@ def load_catalogue(fname,folder='resources', remove_duplicates = True, verbose=T
 		print message
 
 	return name, ra, dec, mag
-
 
