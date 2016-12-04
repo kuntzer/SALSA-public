@@ -41,10 +41,9 @@ from matplotlib.ticker import MaxNLocator, MultipleLocator, FormatStrFormatter
 ###########################################################################
 ### PARAMETERS
 # orbit_id
-alt = 650
-orbit_id = '6am_%d_5_conf4e' % alt
-apogee=alt
-perigee=alt
+orbit_id='700_25_conf4'
+apogee=700
+perigee=700
 
 # First minute in data set !
 minute_ini = 0
@@ -56,23 +55,23 @@ minute_end = 1440*365/12
 orbits_file = 'orbits.dat'
 
 # Maximum visible magnitude
-mag_max = 12
+mag_max = 9
 
 # Min nb_obs_day
-nb_obs_day = 13
+nb_obs_day = 50
 
 # min of scale
 min_val=0
 # max of scale
-max_val=65
+max_val=90
 #
-step_scale=5
+step_scale=10
 
 # Take SAA into account?
 SAA = True
 
 # Minimal minutes to be observed per orbit (if consecutive = False)
-min_t_obs_per_orbit = 59
+min_t_obs_per_orbit = 49
 
 # Print much information ?
 verbose = False
@@ -107,6 +106,9 @@ show_ecliptic=True
 
 # Show constellations ?
 include_constellation = True
+
+# Show Kepler field?
+include_kepler = True
 
 # File name for the input file (in a compressed binary Python format)
 if SAA: note = '_SAA'
@@ -207,10 +209,12 @@ for index_target, target in enumerate(worthy_targets):
 		data_grid[id_dec, id_ra] = obs_tot[index_target]/60./24.
 		if verbose: print target.Coordinates()[0]*180./np.pi,'\t',target.Coordinates()[1]*180./np.pi,'\t', obs_tot[index_target]/24./60.
 
-if verbose: print 'obs start | obs end | days of obs'
+if verbose: print 'obs start | obs end | hours of obs'
 
 print np.amin(data_grid), np.amax(data_grid)
 
+co = np.size(data_grid[np.where(data_grid>0)])
+print 'coverage', float(co)/float(np.size(data_grid))*100, '%'
 
 #plt.figure()
 
@@ -227,11 +231,12 @@ print np.amin(data_grid), np.amax(data_grid)
 ###########################################################################
 ### Plotting
 # transform 0 into no plotting in the data matrix
-val_min= np.amin(data_grid[data_grid>0])
-data_grid[data_grid < val_min] = np.nan
 
-val_min= np.amin(data_grid_days[data_grid_days>0])
-data_grid_days[data_grid_days < val_min] = np.nan
+mag_min= np.amin(data_grid[data_grid>0])
+data_grid[data_grid < mag_min] = np.nan
+
+mag_min= np.amin(data_grid_days[data_grid_days>0])
+data_grid_days[data_grid_days < mag_min] = np.nan
 
 if fancy: figures.set_fancy()
 fig = plt.figure()
@@ -251,18 +256,7 @@ if savetxt:
 	np.savetxt("ra_grid.dat", ra_grid)
 	np.savetxt("dec_grid.dat", dec_grid)
 
-data_grid_cp = np.zeros_like(data_grid)
-ra_grid_cp = np.zeros_like(ra_grid)
-id_ra_neg = ra_grid<0
-id_ra_pos = ra_grid>0
-
-data_grid_cp[id_ra_pos] = data_grid[id_ra_neg]
-data_grid_cp[id_ra_neg] = data_grid[id_ra_pos]
-
-ra_grid_cp[id_ra_pos] = ra_grid[id_ra_neg]
-ra_grid_cp[id_ra_neg] = ra_grid[id_ra_pos]
-
-data_grid = data_grid_cp
+data_grid = np.fliplr(data_grid)
 ra_grid = rah_grid
 
 v = np.arange(min_val,max_val+step_scale, step_scale)
@@ -295,7 +289,16 @@ if include_constellation:
 			else:
 				plt.plot(star[1], star[2], '.', c='grey', ms=2)
 
-#plt.plot(Gemini[:,1], Gemini[:,2], '.')
+if include_kepler:
+	kc = np.loadtxt("resources/kepler_coord.dat")
+	kcr = kc[:,0] / 360. * 24.
+	idc = np.where(kcr < 12.)
+	kcr[idc] = 12.-kcr[idc]
+
+	idc = np.where(kcr > 12.)
+	kcr = 36.-kcr
+
+	plt.plot(kcr, kc[:,1], c='r', lw=2)
 
 stepra = 3
 xticks = np.arange(0, 24+stepra, stepra)
