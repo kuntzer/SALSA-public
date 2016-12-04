@@ -102,12 +102,12 @@ plt.grid()
 print np.amax(delta)
 v = np.arange(min_val,max_val+step_scale, step_scale)
 vl = np.arange(min_val,max_val+step_scale, 2)
-CS = plt.contour( ra_grid,dec_grid,delta,colors='k',levels=vl)
+CS = plt.contour( ra_grid,dec_grid,np.fliplr(delta),colors='k',levels=vl)
 
 plt.clabel(CS, inline=1,fmt='%+d',colors='k', fontsize=12, ticks=v)
 
 
-CS = plt.contourf( ra_grid ,dec_grid,delta,200,cmap=plt.cm.RdBu_r,levels=v)
+CS = plt.contourf( ra_grid ,dec_grid,np.fliplr(delta),200,cmap=plt.cm.RdBu_r,levels=v)
 
 plt.yticks(np.arange(-80, 100, 20.))
 
